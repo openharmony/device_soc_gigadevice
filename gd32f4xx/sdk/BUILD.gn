@@ -1,0 +1,65 @@
+# Copyright (c) 2022 Shenzhen Kaihong Digital Industry Development Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//kernel/liteos_m/liteos.gni")
+
+config("public") {
+  include_dirs = [
+    "CMSIS",
+    "CMSIS/GD/GD32F4xx/Include",
+    "Drivers/GD32F4xx_Driver/Include",
+
+  ]
+}
+
+module_name = "gd32f4xx_sdk"
+
+kernel_module(module_name) {
+  asmflags = board_asmflags
+
+  sources = [
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_adc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_can.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_crc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_ctc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_dac.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_dbg.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_dci.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_dma.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_enet.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_exmc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_exti.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_fmc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_fwdgt.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_gpio.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_i2c.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_ipa.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_iref.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_misc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_pmu.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_rcu.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_rtc.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_sdio.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_spi.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_syscfg.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_timer.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_tli.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_trng.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_usart.c",
+    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_wwdgt.c",
+    
+    "Drivers/GD32F4xx_Driver/Source/fmc_operation.c",
+
+    "CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c",
+  ]
+}
