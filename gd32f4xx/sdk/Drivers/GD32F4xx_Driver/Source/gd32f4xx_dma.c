@@ -37,7 +37,7 @@ OF SUCH DAMAGE.
 #include "gd32f4xx_dma.h"
 
 /*  DMA register bit offset */
-#define CHXCTL_PERIEN_OFFSET            ((uint32_t)25U)
+#define CHXCTL_PERIEN_OFFSET ((uint32_t)25U)
 
 /*!
     \brief    deinitialize DMA a channel registers
@@ -59,10 +59,10 @@ void dma_deinit(uint32_t dma_periph, dma_channel_enum channelx)
     DMA_CHM0ADDR(dma_periph, channelx) = DMA_CHMADDR_RESET_VALUE;
     DMA_CHM1ADDR(dma_periph, channelx) = DMA_CHMADDR_RESET_VALUE;
     DMA_CHFCTL(dma_periph, channelx) = DMA_CHFCTL_RESET_VALUE;
-    if(channelx < DMA_CH4) {
+    if (channelx < DMA_CH4) {
         DMA_INTC0(dma_periph) |= DMA_FLAG_ADD(DMA_CHINTF_RESET_VALUE, channelx);
     } else {
-        channelx -= (dma_channel_enum)4;
+        channelx -= DMA_CH4;
         DMA_INTC1(dma_periph) |= DMA_FLAG_ADD(DMA_CHINTF_RESET_VALUE, channelx);
     }
 }
@@ -76,15 +76,15 @@ void dma_deinit(uint32_t dma_periph, dma_channel_enum channelx)
 void dma_single_data_para_struct_init(dma_single_data_parameter_struct *init_struct)
 {
     /* set the DMA struct with the default values */
-    init_struct->periph_addr         = 0U;
-    init_struct->periph_inc          = DMA_PERIPH_INCREASE_DISABLE;
-    init_struct->memory0_addr        = 0U;
-    init_struct->memory_inc          = DMA_MEMORY_INCREASE_DISABLE;
+    init_struct->periph_addr = 0U;
+    init_struct->periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+    init_struct->memory0_addr = 0U;
+    init_struct->memory_inc = DMA_MEMORY_INCREASE_DISABLE;
     init_struct->periph_memory_width = 0U;
-    init_struct->circular_mode       = DMA_CIRCULAR_MODE_DISABLE;
-    init_struct->direction           = DMA_PERIPH_TO_MEMORY;
-    init_struct->number              = 0U;
-    init_struct->priority            = DMA_PRIORITY_LOW;
+    init_struct->circular_mode = DMA_CIRCULAR_MODE_DISABLE;
+    init_struct->direction = DMA_PERIPH_TO_MEMORY;
+    init_struct->number = 0U;
+    init_struct->priority = DMA_PRIORITY_LOW;
 }
 
 /*!
@@ -96,18 +96,18 @@ void dma_single_data_para_struct_init(dma_single_data_parameter_struct *init_str
 void dma_multi_data_para_struct_init(dma_multi_data_parameter_struct *init_struct)
 {
     /* set the DMA struct with the default values */
-    init_struct->periph_addr         = 0U;
-    init_struct->periph_width        = 0U;
-    init_struct->periph_inc          = DMA_PERIPH_INCREASE_DISABLE;
-    init_struct->memory0_addr        = 0U;
-    init_struct->memory_width        = 0U;
-    init_struct->memory_inc          = DMA_MEMORY_INCREASE_DISABLE;
-    init_struct->memory_burst_width  = 0U;
-    init_struct->periph_burst_width  = 0U;
-    init_struct->circular_mode       = DMA_CIRCULAR_MODE_DISABLE;
-    init_struct->direction           = DMA_PERIPH_TO_MEMORY;
-    init_struct->number              = 0U;
-    init_struct->priority            = DMA_PRIORITY_LOW;
+    init_struct->periph_addr = 0U;
+    init_struct->periph_width = 0U;
+    init_struct->periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+    init_struct->memory0_addr = 0U;
+    init_struct->memory_width = 0U;
+    init_struct->memory_inc = DMA_MEMORY_INCREASE_DISABLE;
+    init_struct->memory_burst_width = 0U;
+    init_struct->periph_burst_width = 0U;
+    init_struct->circular_mode = DMA_CIRCULAR_MODE_DISABLE;
+    init_struct->direction = DMA_PERIPH_TO_MEMORY;
+    init_struct->number = 0U;
+    init_struct->priority = DMA_PRIORITY_LOW;
 }
 
 /*!
@@ -129,7 +129,8 @@ void dma_multi_data_para_struct_init(dma_multi_data_parameter_struct *init_struc
     \param[out] none
     \retval     none
 */
-void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_single_data_parameter_struct *init_struct)
+void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx,
+                               dma_single_data_parameter_struct *init_struct)
 {
     uint32_t ctl;
 
@@ -148,27 +149,28 @@ void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, d
     /* configure peripheral and memory transfer width,channel priotity,transfer mode */
     ctl = DMA_CHCTL(dma_periph, channelx);
     ctl &= ~(DMA_CHXCTL_PWIDTH | DMA_CHXCTL_MWIDTH | DMA_CHXCTL_PRIO | DMA_CHXCTL_TM);
-    ctl |= (init_struct->periph_memory_width | (init_struct->periph_memory_width << 2) | init_struct->priority | init_struct->direction);
+    ctl |= (init_struct->periph_memory_width | (init_struct->periph_memory_width << 0x2) | init_struct->priority |
+            init_struct->direction);
     DMA_CHCTL(dma_periph, channelx) = ctl;
 
     /* configure peripheral increasing mode */
-    if(DMA_PERIPH_INCREASE_ENABLE == init_struct->periph_inc) {
+    if (DMA_PERIPH_INCREASE_ENABLE == init_struct->periph_inc) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_PNAGA;
-    } else if(DMA_PERIPH_INCREASE_DISABLE == init_struct->periph_inc) {
+    } else if (DMA_PERIPH_INCREASE_DISABLE == init_struct->periph_inc) {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_PNAGA;
     } else {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_PAIF;
     }
 
     /* configure memory increasing mode */
-    if(DMA_MEMORY_INCREASE_ENABLE == init_struct->memory_inc) {
+    if (DMA_MEMORY_INCREASE_ENABLE == init_struct->memory_inc) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_MNAGA;
     } else {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_MNAGA;
     }
 
     /* configure DMA circular mode */
-    if(DMA_CIRCULAR_MODE_ENABLE == init_struct->circular_mode) {
+    if (DMA_CIRCULAR_MODE_ENABLE == init_struct->circular_mode) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_CMEN;
     } else {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_CMEN;
@@ -188,17 +190,17 @@ void dma_single_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, d
                   memory0_addr: memory0 base address
                   memory_width: DMA_MEMORY_WIDTH_8BIT,DMA_MEMORY_WIDTH_16BIT,DMA_MEMORY_WIDTH_32BIT
                   memory_inc: DMA_MEMORY_INCREASE_ENABLE,DMA_MEMORY_INCREASE_DISABLE
-                  memory_burst_width: DMA_MEMORY_BURST_SINGLE,DMA_MEMORY_BURST_4_BEAT,DMA_MEMORY_BURST_8_BEAT,DMA_MEMORY_BURST_16_BEAT
-                  periph_burst_width: DMA_PERIPH_BURST_SINGLE,DMA_PERIPH_BURST_4_BEAT,DMA_PERIPH_BURST_8_BEAT,DMA_PERIPH_BURST_16_BEAT
-                  critical_value: DMA_FIFO_1_WORD,DMA_FIFO_2_WORD,DMA_FIFO_3_WORD,DMA_FIFO_4_WORD
-                  circular_mode: DMA_CIRCULAR_MODE_ENABLE,DMA_CIRCULAR_MODE_DISABLE
-                  direction: DMA_PERIPH_TO_MEMORY,DMA_MEMORY_TO_PERIPH,DMA_MEMORY_TO_MEMORY
-                  number: the number of remaining data to be transferred by the DMA
-                  priority: DMA_PRIORITY_LOW,DMA_PRIORITY_MEDIUM,DMA_PRIORITY_HIGH,DMA_PRIORITY_ULTRA_HIGH
-    \param[out] none
+                  memory_burst_width
+   DMA_MEMORY_BURST_SINGLE,DMA_MEMORY_BURST_4_BEAT,DMA_MEMORY_BURST_8_BEAT,DMA_MEMORY_BURST_16_BEAT periph_burst_width
+   DMA_PERIPH_BURST_SINGLE,DMA_PERIPH_BURST_4_BEAT,DMA_PERIPH_BURST_8_BEAT,DMA_PERIPH_BURST_16_BEAT critical_value
+   DMA_FIFO_1_WORD,DMA_FIFO_2_WORD,DMA_FIFO_3_WORD,DMA_FIFO_4_WORD circular_mode
+   DMA_CIRCULAR_MODE_ENABLE,DMA_CIRCULAR_MODE_DISABLE direction
+   DMA_PERIPH_TO_MEMORY,DMA_MEMORY_TO_PERIPH,DMA_MEMORY_TO_MEMORY number: the number of remaining data to be transferred
+   by the DMA priority: DMA_PRIORITY_LOW,DMA_PRIORITY_MEDIUM,DMA_PRIORITY_HIGH,DMA_PRIORITY_ULTRA_HIGH \param[out] none
     \retval     none
 */
-void dma_multi_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dma_multi_data_parameter_struct *init_struct)
+void dma_multi_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx,
+                              dma_multi_data_parameter_struct *init_struct)
 {
     uint32_t ctl;
 
@@ -214,31 +216,33 @@ void dma_multi_data_mode_init(uint32_t dma_periph, dma_channel_enum channelx, dm
     /* configure the number of remaining data to be transferred */
     DMA_CHCNT(dma_periph, channelx) = init_struct->number;
 
-    /* configure peripheral and memory transfer width,channel priotity,transfer mode,peripheral and memory burst transfer width */
+    /* configure peripheral and memory transfer width,channel priotity,transfer mode,peripheral and memory burst
+     * transfer width */
     ctl = DMA_CHCTL(dma_periph, channelx);
-    ctl &= ~(DMA_CHXCTL_PWIDTH | DMA_CHXCTL_MWIDTH | DMA_CHXCTL_PRIO | DMA_CHXCTL_TM | DMA_CHXCTL_PBURST | DMA_CHXCTL_MBURST);
-    ctl |= (init_struct->periph_width | (init_struct->memory_width) | init_struct->priority | init_struct->direction | init_struct->memory_burst_width |
-            init_struct->periph_burst_width);
+    ctl &= ~(DMA_CHXCTL_PWIDTH | DMA_CHXCTL_MWIDTH | DMA_CHXCTL_PRIO | DMA_CHXCTL_TM | DMA_CHXCTL_PBURST |
+             DMA_CHXCTL_MBURST);
+    ctl |= (init_struct->periph_width | (init_struct->memory_width) | init_struct->priority | init_struct->direction |
+            init_struct->memory_burst_width | init_struct->periph_burst_width);
     DMA_CHCTL(dma_periph, channelx) = ctl;
 
     /* configure peripheral increasing mode */
-    if(DMA_PERIPH_INCREASE_ENABLE == init_struct->periph_inc) {
+    if (DMA_PERIPH_INCREASE_ENABLE == init_struct->periph_inc) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_PNAGA;
-    } else if(DMA_PERIPH_INCREASE_DISABLE == init_struct->periph_inc) {
+    } else if (DMA_PERIPH_INCREASE_DISABLE == init_struct->periph_inc) {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_PNAGA;
     } else {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_PAIF;
     }
 
     /* configure memory increasing mode */
-    if(DMA_MEMORY_INCREASE_ENABLE == init_struct->memory_inc) {
+    if (DMA_MEMORY_INCREASE_ENABLE == init_struct->memory_inc) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_MNAGA;
     } else {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_MNAGA;
     }
 
     /* configure DMA circular mode */
-    if(DMA_CIRCULAR_MODE_ENABLE == init_struct->circular_mode) {
+    if (DMA_CIRCULAR_MODE_ENABLE == init_struct->circular_mode) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_CMEN;
     } else {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_CMEN;
@@ -273,7 +277,7 @@ void dma_periph_address_config(uint32_t dma_periph, dma_channel_enum channelx, u
 */
 void dma_memory_address_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t memory_flag, uint32_t address)
 {
-    if(memory_flag) {
+    if (memory_flag) {
         DMA_CHM1ADDR(dma_periph, channelx) = address;
     } else {
         DMA_CHM0ADDR(dma_periph, channelx) = address;
@@ -451,7 +455,7 @@ void dma_periph_width_config(uint32_t dma_periph, dma_channel_enum channelx, uin
 */
 void dma_memory_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm)
 {
-    if(DMA_MEMORY_INCREASE_ENABLE == generation_algorithm) {
+    if (DMA_MEMORY_INCREASE_ENABLE == generation_algorithm) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_MNAGA;
     } else {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_MNAGA;
@@ -472,11 +476,12 @@ void dma_memory_address_generation_config(uint32_t dma_periph, dma_channel_enum 
     \param[out] none
     \retval     none
 */
-void dma_peripheral_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx, uint8_t generation_algorithm)
+void dma_peripheral_address_generation_config(uint32_t dma_periph, dma_channel_enum channelx,
+                                              uint8_t generation_algorithm)
 {
-    if(DMA_PERIPH_INCREASE_ENABLE == generation_algorithm) {
+    if (DMA_PERIPH_INCREASE_ENABLE == generation_algorithm) {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_PNAGA;
-    } else if(DMA_PERIPH_INCREASE_DISABLE == generation_algorithm) {
+    } else if (DMA_PERIPH_INCREASE_DISABLE == generation_algorithm) {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_PNAGA;
     } else {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_PNAGA;
@@ -577,12 +582,13 @@ void dma_transfer_direction_config(uint32_t dma_periph, dma_channel_enum channel
     \param[out] none
     \retval     none
 */
-void dma_switch_buffer_mode_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t memory1_addr, uint32_t memory_select)
+void dma_switch_buffer_mode_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t memory1_addr,
+                                   uint32_t memory_select)
 {
     /* configure memory1 base address */
     DMA_CHM1ADDR(dma_periph, channelx) = memory1_addr;
 
-    if(DMA_MEMORY_0 == memory_select) {
+    if (DMA_MEMORY_0 == memory_select) {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_MBS;
     } else {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_MBS;
@@ -600,7 +606,7 @@ void dma_switch_buffer_mode_config(uint32_t dma_periph, dma_channel_enum channel
 */
 uint32_t dma_using_memory_get(uint32_t dma_periph, dma_channel_enum channelx)
 {
-    if((DMA_CHCTL(dma_periph, channelx)) & DMA_CHXCTL_MBS) {
+    if ((DMA_CHCTL(dma_periph, channelx)) & DMA_CHXCTL_MBS) {
         return DMA_MEMORY_1;
     } else {
         return DMA_MEMORY_0;
@@ -645,7 +651,7 @@ void dma_channel_subperipheral_select(uint32_t dma_periph, dma_channel_enum chan
 */
 void dma_flow_controller_config(uint32_t dma_periph, dma_channel_enum channelx, uint32_t controller)
 {
-    if(DMA_FLOW_CONTROLLER_DMA == controller) {
+    if (DMA_FLOW_CONTROLLER_DMA == controller) {
         DMA_CHCTL(dma_periph, channelx) &= ~DMA_CHXCTL_TFCS;
     } else {
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_TFCS;
@@ -664,7 +670,7 @@ void dma_flow_controller_config(uint32_t dma_periph, dma_channel_enum channelx, 
 */
 void dma_switch_buffer_mode_enable(uint32_t dma_periph, dma_channel_enum channelx, ControlStatus newvalue)
 {
-    if(ENABLE == newvalue) {
+    if (ENABLE == newvalue) {
         /* switch buffer mode enable */
         DMA_CHCTL(dma_periph, channelx) |= DMA_CHXCTL_SBMEN;
     } else {
@@ -705,15 +711,15 @@ uint32_t dma_fifo_status_get(uint32_t dma_periph, dma_channel_enum channelx)
 */
 FlagStatus dma_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag)
 {
-    if(channelx < DMA_CH4) {
-        if(DMA_INTF0(dma_periph) & DMA_FLAG_ADD(flag, channelx)) {
+    if (channelx < DMA_CH4) {
+        if (DMA_INTF0(dma_periph) & DMA_FLAG_ADD(flag, channelx)) {
             return SET;
         } else {
             return RESET;
         }
     } else {
-        channelx -= (dma_channel_enum)4;
-        if(DMA_INTF1(dma_periph) & DMA_FLAG_ADD(flag, channelx)) {
+        channelx -= DMA_CH4;
+        if (DMA_INTF1(dma_periph) & DMA_FLAG_ADD(flag, channelx)) {
             return SET;
         } else {
             return RESET;
@@ -739,10 +745,10 @@ FlagStatus dma_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t
 */
 void dma_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t flag)
 {
-    if(channelx < DMA_CH4) {
+    if (channelx < DMA_CH4) {
         DMA_INTC0(dma_periph) |= DMA_FLAG_ADD(flag, channelx);
     } else {
-        channelx -= (dma_channel_enum)4;
+        channelx -= DMA_CH4;
         DMA_INTC1(dma_periph) |= DMA_FLAG_ADD(flag, channelx);
     }
 }
@@ -765,7 +771,7 @@ void dma_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t fla
 */
 void dma_interrupt_enable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source)
 {
-    if(DMA_CHXFCTL_FEEIE != source) {
+    if (DMA_CHXFCTL_FEEIE != source) {
         DMA_CHCTL(dma_periph, channelx) |= source;
     } else {
         DMA_CHFCTL(dma_periph, channelx) |= source;
@@ -790,7 +796,7 @@ void dma_interrupt_enable(uint32_t dma_periph, dma_channel_enum channelx, uint32
 */
 void dma_interrupt_disable(uint32_t dma_periph, dma_channel_enum channelx, uint32_t source)
 {
-    if(DMA_CHXFCTL_FEEIE != source) {
+    if (DMA_CHXFCTL_FEEIE != source) {
         DMA_CHCTL(dma_periph, channelx) &= ~source;
     } else {
         DMA_CHFCTL(dma_periph, channelx) &= ~source;
@@ -813,64 +819,70 @@ void dma_interrupt_disable(uint32_t dma_periph, dma_channel_enum channelx, uint3
     \param[out] none
     \retval     FlagStatus: SET or RESET
 */
+void dma_interrupt_flag_get_litte(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt,
+                                  uint32_t *interrupt_enable, uint32_t *interrupt_flag)
+{
+    dma_channel_enum channel_flag_offset = channelx;
+    switch (interrupt) {
+        case DMA_INTF_FEEIF:
+            *interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
+            *interrupt_enable = DMA_CHFCTL(dma_periph, channelx) & DMA_CHXFCTL_FEEIE;
+            break;
+        case DMA_INTF_SDEIF:
+            *interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
+            *interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_SDEIE;
+            break;
+        case DMA_INTF_TAEIF:
+            *interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
+            *interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_TAEIE;
+            break;
+        case DMA_INTF_HTFIF:
+            *interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
+            *interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_HTFIE;
+            break;
+        case DMA_INTF_FTFIF:
+            *interrupt_flag = (DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx));
+            *interrupt_enable = (DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_FTFIE);
+            break;
+        default:
+            break;
+    }
+}
 FlagStatus dma_interrupt_flag_get(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt)
 {
     uint32_t interrupt_enable = 0U, interrupt_flag = 0U;
     dma_channel_enum channel_flag_offset = channelx;
-    if(channelx < DMA_CH4) {
-        switch(interrupt) {
-        case DMA_INTF_FEEIF:
-            interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
-            interrupt_enable = DMA_CHFCTL(dma_periph, channelx) & DMA_CHXFCTL_FEEIE;
-            break;
-        case DMA_INTF_SDEIF:
-            interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_SDEIE;
-            break;
-        case DMA_INTF_TAEIF:
-            interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_TAEIE;
-            break;
-        case DMA_INTF_HTFIF:
-            interrupt_flag = DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_HTFIE;
-            break;
-        case DMA_INTF_FTFIF:
-            interrupt_flag = (DMA_INTF0(dma_periph) & DMA_FLAG_ADD(interrupt, channelx));
-            interrupt_enable = (DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_FTFIE);
-            break;
-        default:
-            break;
-        }
+    if (channelx < DMA_CH4) {
+        dma_interrupt_flag_get_litte(dma_periph, channelx, interrupt, &interrupt_enable, &interrupt_flag);
     } else {
-        channel_flag_offset -= (dma_channel_enum)4;
-        switch(interrupt) {
-        case DMA_INTF_FEEIF:
-            interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
-            interrupt_enable = DMA_CHFCTL(dma_periph, channelx) & DMA_CHXFCTL_FEEIE;
-            break;
-        case DMA_INTF_SDEIF:
-            interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_SDEIE;
-            break;
-        case DMA_INTF_TAEIF:
-            interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_TAEIE;
-            break;
-        case DMA_INTF_HTFIF:
-            interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_HTFIE;
-            break;
-        case DMA_INTF_FTFIF:
-            interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
-            interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_FTFIE;
-            break;
-        default:
-            break;
+        channel_flag_offset -= DMA_CH4;
+        switch (interrupt) {
+            case DMA_INTF_FEEIF:
+                interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
+                interrupt_enable = DMA_CHFCTL(dma_periph, channelx) & DMA_CHXFCTL_FEEIE;
+                break;
+            case DMA_INTF_SDEIF:
+                interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
+                interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_SDEIE;
+                break;
+            case DMA_INTF_TAEIF:
+                interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
+                interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_TAEIE;
+                break;
+            case DMA_INTF_HTFIF:
+                interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
+                interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_HTFIE;
+                break;
+            case DMA_INTF_FTFIF:
+                interrupt_flag = DMA_INTF1(dma_periph) & DMA_FLAG_ADD(interrupt, channel_flag_offset);
+                interrupt_enable = DMA_CHCTL(dma_periph, channelx) & DMA_CHXCTL_FTFIE;
+                break;
+            default:
+                break;
         }
     }
 
-    if(interrupt_flag && interrupt_enable) {
+    if (interrupt_flag && interrupt_enable) {
         return SET;
     } else {
         return RESET;
@@ -895,10 +907,10 @@ FlagStatus dma_interrupt_flag_get(uint32_t dma_periph, dma_channel_enum channelx
 */
 void dma_interrupt_flag_clear(uint32_t dma_periph, dma_channel_enum channelx, uint32_t interrupt)
 {
-    if(channelx < DMA_CH4) {
+    if (channelx < DMA_CH4) {
         DMA_INTC0(dma_periph) |= DMA_FLAG_ADD(interrupt, channelx);
     } else {
-        channelx -= (dma_channel_enum)4;
+        channelx -= DMA_CH4;
         DMA_INTC1(dma_periph) |= DMA_FLAG_ADD(interrupt, channelx);
     }
 }

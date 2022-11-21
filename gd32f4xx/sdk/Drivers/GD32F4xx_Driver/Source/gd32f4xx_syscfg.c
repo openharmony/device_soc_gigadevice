@@ -55,11 +55,10 @@ void syscfg_deinit(void)
                 only one parameter can be selected which is shown as below:
       \arg        SYSCFG_BOOTMODE_FLASH: main flash memory (0x08000000~0x083BFFFF) is mapped at address 0x00000000
       \arg        SYSCFG_BOOTMODE_BOOTLOADER: boot loader (0x1FFF0000 - 0x1FFF77FF) is mapped at address 0x00000000
-      \arg        SYSCFG_BOOTMODE_EXMC_SRAM: SRAM/NOR 0 and 1 of EXMC (0x60000000~0x67FFFFFF) is mapped at address 0x00000000
-      \arg        SYSCFG_BOOTMODE_SRAM: SRAM0 of on-chip SRAM (0x20000000~0x2001BFFF) is mapped at address 0x00000000
-      \arg        SYSCFG_BOOTMODE_EXMC_SDRAM: SDRAM bank0 of EXMC (0xC0000000~0xC7FFFFFF) is mapped at address 0x00000000
-    \param[out] none
-    \retval     none
+      \arg        SYSCFG_BOOTMODE_EXMC_SRAM: SRAM/NOR 0 and 1 of EXMC (0x60000000~0x67FFFFFF) is mapped at address
+   0x00000000 \arg        SYSCFG_BOOTMODE_SRAM: SRAM0 of on-chip SRAM (0x20000000~0x2001BFFF) is mapped at address
+   0x00000000 \arg        SYSCFG_BOOTMODE_EXMC_SDRAM: SDRAM bank0 of EXMC (0xC0000000~0xC7FFFFFF) is mapped at address
+   0x00000000 \param[out] none \retval     none
 */
 void syscfg_bootmode_config(uint8_t syscfg_bootmode)
 {
@@ -72,10 +71,9 @@ void syscfg_bootmode_config(uint8_t syscfg_bootmode)
     \brief    FMC memory mapping swap
     \param[in]  syscfg_fmc_swap: selects the interal flash bank swapping
                 only one parameter can be selected which is shown as below:
-      \arg        SYSCFG_FMC_SWP_BANK0: bank 0 is mapped at address 0x08000000 and bank 1 is mapped at address 0x08100000
-      \arg        SYSCFG_FMC_SWP_BANK1: bank 1 is mapped at address 0x08000000 and bank 0 is mapped at address 0x08100000
-    \param[out] none
-    \retval     none
+      \arg        SYSCFG_FMC_SWP_BANK0: bank 0 is mapped at address 0x08000000 and bank 1 is mapped at address
+   0x08100000 \arg        SYSCFG_FMC_SWP_BANK1: bank 1 is mapped at address 0x08000000 and bank 0 is mapped at address
+   0x08100000 \param[out] none \retval     none
 */
 void syscfg_fmc_swap_config(uint32_t syscfg_fmc_swap)
 {
@@ -121,33 +119,33 @@ void syscfg_exti_line_config(uint8_t exti_port, uint8_t exti_pin)
     uint32_t clear_exti_mask = ~((uint32_t)EXTI_SS_MASK << (EXTI_SS_MSTEP(exti_pin)));
     uint32_t config_exti_mask = ((uint32_t)exti_port) << (EXTI_SS_MSTEP(exti_pin));
 
-    switch(exti_pin / EXTI_SS_JSTEP) {
-    case EXTISS0:
-        /* clear EXTI source line(0..3) */
-        SYSCFG_EXTISS0 &= clear_exti_mask;
-        /* configure EXTI soure line(0..3) */
-        SYSCFG_EXTISS0 |= config_exti_mask;
-        break;
-    case EXTISS1:
-        /* clear EXTI soure line(4..7) */
-        SYSCFG_EXTISS1 &= clear_exti_mask;
-        /* configure EXTI soure line(4..7) */
-        SYSCFG_EXTISS1 |= config_exti_mask;
-        break;
-    case EXTISS2:
-        /* clear EXTI soure line(8..11) */
-        SYSCFG_EXTISS2 &= clear_exti_mask;
-        /* configure EXTI soure line(8..11) */
-        SYSCFG_EXTISS2 |= config_exti_mask;
-        break;
-    case EXTISS3:
-        /* clear EXTI soure line(12..15) */
-        SYSCFG_EXTISS3 &= clear_exti_mask;
-        /* configure EXTI soure line(12..15) */
-        SYSCFG_EXTISS3 |= config_exti_mask;
-        break;
-    default:
-        break;
+    switch (exti_pin / EXTI_SS_JSTEP) {
+        case EXTISS0:
+            /* clear EXTI source line(0..3) */
+            SYSCFG_EXTISS0 &= clear_exti_mask;
+            /* configure EXTI soure line(0..3) */
+            SYSCFG_EXTISS0 |= config_exti_mask;
+            break;
+        case EXTISS1:
+            /* clear EXTI soure line(4..7) */
+            SYSCFG_EXTISS1 &= clear_exti_mask;
+            /* configure EXTI soure line(4..7) */
+            SYSCFG_EXTISS1 |= config_exti_mask;
+            break;
+        case EXTISS2:
+            /* clear EXTI soure line(8..11) */
+            SYSCFG_EXTISS2 &= clear_exti_mask;
+            /* configure EXTI soure line(8..11) */
+            SYSCFG_EXTISS2 |= config_exti_mask;
+            break;
+        case EXTISS3:
+            /* clear EXTI soure line(12..15) */
+            SYSCFG_EXTISS3 &= clear_exti_mask;
+            /* configure EXTI soure line(12..15) */
+            SYSCFG_EXTISS3 |= config_exti_mask;
+            break;
+        default:
+            break;
     }
 }
 
@@ -197,7 +195,7 @@ void syscfg_compensation_config(uint32_t syscfg_compensation)
   */
 FlagStatus syscfg_flag_get(void)
 {
-    if(((uint32_t)RESET) != (SYSCFG_CPSCTL & SYSCFG_CPSCTL_CPS_RDY)) {
+    if (((uint32_t)RESET) != (SYSCFG_CPSCTL & SYSCFG_CPSCTL_CPS_RDY)) {
         return SET;
     } else {
         return RESET;

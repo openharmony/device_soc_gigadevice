@@ -91,13 +91,10 @@ void pmu_lvd_disable(void)
 
 /*!
     \brief      select LDO output voltage
-                this bit set by software when the main PLL closed, before closing PLL, change the system clock to IRC16M or HXTAL
-    \param[in]  ldo_output:
-      \arg        PMU_LDOVS_LOW: low-driver mode enable in deep-sleep mode
-      \arg        PMU_LDOVS_MID: mid-driver mode disable in deep-sleep mode
-      \arg        PMU_LDOVS_HIGH: high-driver mode disable in deep-sleep mode
-    \param[out] none
-    \retval     none
+                this bit set by software when the main PLL closed, before closing PLL, change the system clock to IRC16M
+   or HXTAL \param[in]  ldo_output: \arg        PMU_LDOVS_LOW: low-driver mode enable in deep-sleep mode \arg
+   PMU_LDOVS_MID: mid-driver mode disable in deep-sleep mode \arg        PMU_LDOVS_HIGH: high-driver mode disable in
+   deep-sleep mode \param[out] none \retval     none
 */
 void pmu_ldo_output_select(uint32_t ldo_output)
 {
@@ -140,8 +137,7 @@ void pmu_highdriver_mode_disable(void)
 void pmu_highdriver_switch_select(uint32_t highdr_switch)
 {
     /* wait for HDRF flag set */
-    while(SET != pmu_flag_get(PMU_FLAG_HDRF)) {
-    }
+    while (SET != pmu_flag_get(PMU_FLAG_HDRF)) { }
     PMU_CTL &= ~PMU_CTL_HDS;
     PMU_CTL |= highdr_switch;
 }
@@ -210,7 +206,7 @@ void pmu_to_sleepmode(uint8_t sleepmodecmd)
     SCB->SCR &= ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);
 
     /* select WFI or WFE command to enter sleep mode */
-    if(WFI_CMD == sleepmodecmd) {
+    if (WFI_CMD == sleepmodecmd) {
         __WFI();
     } else {
         __WFE();
@@ -242,8 +238,8 @@ void pmu_to_deepsleepmode(uint32_t ldo, uint32_t lowdrive, uint8_t deepsleepmode
     PMU_CTL |= ldo;
 
     /* configure low drive mode in deep-sleep mode */
-    if(PMU_LOWDRIVER_ENABLE == lowdrive) {
-        if(PMU_LDO_NORMAL == ldo) {
+    if (PMU_LOWDRIVER_ENABLE == lowdrive) {
+        if (PMU_LDO_NORMAL == ldo) {
             PMU_CTL |= (uint32_t)(PMU_CTL_LDEN | PMU_CTL_LDNP);
         } else {
             PMU_CTL |= (uint32_t)(PMU_CTL_LDEN | PMU_CTL_LDLP);
@@ -252,18 +248,18 @@ void pmu_to_deepsleepmode(uint32_t ldo, uint32_t lowdrive, uint8_t deepsleepmode
     /* set sleepdeep bit of Cortex-M4 system control register */
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
 
-    reg_snap[0] = REG32(0xE000E010U);
-    reg_snap[1] = REG32(0xE000E100U);
-    reg_snap[2] = REG32(0xE000E104U);
-    reg_snap[3] = REG32(0xE000E108U);
+    reg_snap[0x0] = REG32(0xE000E010U);
+    reg_snap[0x1] = REG32(0xE000E100U);
+    reg_snap[0x2] = REG32(0xE000E104U);
+    reg_snap[0x3] = REG32(0xE000E108U);
 
     REG32(0xE000E010U) &= 0x00010004U;
-    REG32(0xE000E180U)  = 0XFF7FF831U;
-    REG32(0xE000E184U)  = 0XBFFFF8FFU;
-    REG32(0xE000E188U)  = 0xFFFFEFFFU;
+    REG32(0xE000E180U) = 0XFF7FF831U;
+    REG32(0xE000E184U) = 0XBFFFF8FFU;
+    REG32(0xE000E188U) = 0xFFFFEFFFU;
 
     /* select WFI or WFE command to enter deep-sleep mode */
-    if(WFI_CMD == deepsleepmodecmd) {
+    if (WFI_CMD == deepsleepmodecmd) {
         __WFI();
     } else {
         __SEV();
@@ -271,10 +267,10 @@ void pmu_to_deepsleepmode(uint32_t ldo, uint32_t lowdrive, uint8_t deepsleepmode
         __WFE();
     }
 
-    REG32(0xE000E010U) = reg_snap[0];
-    REG32(0xE000E100U) = reg_snap[1];
-    REG32(0xE000E104U) = reg_snap[2];
-    REG32(0xE000E108U) = reg_snap[3];
+    REG32(0xE000E010U) = reg_snap[0x0];
+    REG32(0xE000E100U) = reg_snap[0x1];
+    REG32(0xE000E104U) = reg_snap[0x2];
+    REG32(0xE000E108U) = reg_snap[0x3];
 
     /* reset sleepdeep bit of Cortex-M4 system control register */
     SCB->SCR &= ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);
@@ -302,10 +298,10 @@ void pmu_to_standbymode(void)
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
 
     REG32(0xE000E010U) &= 0x00010004U;
-    REG32(0xE000E180U)  = 0XFFFFFFF7U;
-    REG32(0xE000E184U)  = 0XFFFFFDFFU;
-    REG32(0xE000E188U)  = 0xFFFFFFFFU;
-        __WFI();
+    REG32(0xE000E180U) = 0XFFFFFFF7U;
+    REG32(0xE000E184U) = 0XFFFFFDFFU;
+    REG32(0xE000E188U) = 0xFFFFFFFFU;
+    __WFI();
 }
 
 /*!
@@ -382,7 +378,7 @@ void pmu_backup_write_disable(void)
 */
 FlagStatus pmu_flag_get(uint32_t flag)
 {
-    if(PMU_CS & flag) {
+    if (PMU_CS & flag) {
         return SET;
     } else {
         return RESET;
@@ -399,16 +395,16 @@ FlagStatus pmu_flag_get(uint32_t flag)
 */
 void pmu_flag_clear(uint32_t flag)
 {
-    switch(flag) {
-    case PMU_FLAG_RESET_WAKEUP:
-        /* reset wakeup flag */
-        PMU_CTL |= PMU_CTL_WURST;
-        break;
-    case PMU_FLAG_RESET_STANDBY:
-        /* reset standby flag */
-        PMU_CTL |= PMU_CTL_STBRST;
-        break;
-    default :
-        break;
+    switch (flag) {
+        case PMU_FLAG_RESET_WAKEUP:
+            /* reset wakeup flag */
+            PMU_CTL |= PMU_CTL_WURST;
+            break;
+        case PMU_FLAG_RESET_STANDBY:
+            /* reset standby flag */
+            PMU_CTL |= PMU_CTL_STBRST;
+            break;
+        default:
+            break;
     }
 }

@@ -47,54 +47,54 @@ OF SUCH DAMAGE.
 */
 void gpio_deinit(uint32_t gpio_periph)
 {
-    switch(gpio_periph) {
-    case GPIOA:
-        /* reset GPIOA */
-        rcu_periph_reset_enable(RCU_GPIOARST);
-        rcu_periph_reset_disable(RCU_GPIOARST);
-        break;
-    case GPIOB:
-        /* reset GPIOB */
-        rcu_periph_reset_enable(RCU_GPIOBRST);
-        rcu_periph_reset_disable(RCU_GPIOBRST);
-        break;
-    case GPIOC:
-        /* reset GPIOC */
-        rcu_periph_reset_enable(RCU_GPIOCRST);
-        rcu_periph_reset_disable(RCU_GPIOCRST);
-        break;
-    case GPIOD:
-        /* reset GPIOD */
-        rcu_periph_reset_enable(RCU_GPIODRST);
-        rcu_periph_reset_disable(RCU_GPIODRST);
-        break;
-    case GPIOE:
-        /* reset GPIOE */
-        rcu_periph_reset_enable(RCU_GPIOERST);
-        rcu_periph_reset_disable(RCU_GPIOERST);
-        break;
-    case GPIOF:
-        /* reset GPIOF */
-        rcu_periph_reset_enable(RCU_GPIOFRST);
-        rcu_periph_reset_disable(RCU_GPIOFRST);
-        break;
-    case GPIOG:
-        /* reset GPIOG */
-        rcu_periph_reset_enable(RCU_GPIOGRST);
-        rcu_periph_reset_disable(RCU_GPIOGRST);
-        break;
-    case GPIOH:
-        /* reset GPIOH */
-        rcu_periph_reset_enable(RCU_GPIOHRST);
-        rcu_periph_reset_disable(RCU_GPIOHRST);
-        break;
-    case GPIOI:
-        /* reset GPIOI */
-        rcu_periph_reset_enable(RCU_GPIOIRST);
-        rcu_periph_reset_disable(RCU_GPIOIRST);
-        break;
-    default:
-        break;
+    switch (gpio_periph) {
+        case GPIOA:
+            /* reset GPIOA */
+            rcu_periph_reset_enable(RCU_GPIOARST);
+            rcu_periph_reset_disable(RCU_GPIOARST);
+            break;
+        case GPIOB:
+            /* reset GPIOB */
+            rcu_periph_reset_enable(RCU_GPIOBRST);
+            rcu_periph_reset_disable(RCU_GPIOBRST);
+            break;
+        case GPIOC:
+            /* reset GPIOC */
+            rcu_periph_reset_enable(RCU_GPIOCRST);
+            rcu_periph_reset_disable(RCU_GPIOCRST);
+            break;
+        case GPIOD:
+            /* reset GPIOD */
+            rcu_periph_reset_enable(RCU_GPIODRST);
+            rcu_periph_reset_disable(RCU_GPIODRST);
+            break;
+        case GPIOE:
+            /* reset GPIOE */
+            rcu_periph_reset_enable(RCU_GPIOERST);
+            rcu_periph_reset_disable(RCU_GPIOERST);
+            break;
+        case GPIOF:
+            /* reset GPIOF */
+            rcu_periph_reset_enable(RCU_GPIOFRST);
+            rcu_periph_reset_disable(RCU_GPIOFRST);
+            break;
+        case GPIOG:
+            /* reset GPIOG */
+            rcu_periph_reset_enable(RCU_GPIOGRST);
+            rcu_periph_reset_disable(RCU_GPIOGRST);
+            break;
+        case GPIOH:
+            /* reset GPIOH */
+            rcu_periph_reset_enable(RCU_GPIOHRST);
+            rcu_periph_reset_disable(RCU_GPIOHRST);
+            break;
+        case GPIOI:
+            /* reset GPIOI */
+            rcu_periph_reset_enable(RCU_GPIOIRST);
+            rcu_periph_reset_disable(RCU_GPIOIRST);
+            break;
+        default:
+            break;
     }
 }
 
@@ -126,8 +126,8 @@ void gpio_mode_set(uint32_t gpio_periph, uint32_t mode, uint32_t pull_up_down, u
     ctl = GPIO_CTL(gpio_periph);
     pupd = GPIO_PUD(gpio_periph);
 
-    for(i = 0U; i < 16U; i++) {
-        if((1U << i) & pin) {
+    for (i = 0U; i < 16U; i++) {
+        if ((1U << i) & pin) {
             /* clear the specified pin mode bits */
             ctl &= ~GPIO_MODE_MASK(i);
             /* set the specified pin mode bits */
@@ -168,7 +168,7 @@ void gpio_output_options_set(uint32_t gpio_periph, uint8_t otype, uint32_t speed
     uint16_t i;
     uint32_t ospeedr;
 
-    if(GPIO_OTYPE_OD == otype) {
+    if (GPIO_OTYPE_OD == otype) {
         GPIO_OMODE(gpio_periph) |= (uint32_t)pin;
     } else {
         GPIO_OMODE(gpio_periph) &= (uint32_t)(~pin);
@@ -177,8 +177,8 @@ void gpio_output_options_set(uint32_t gpio_periph, uint8_t otype, uint32_t speed
     /* get the specified pin output speed bits value */
     ospeedr = GPIO_OSPD(gpio_periph);
 
-    for(i = 0U; i < 16U; i++) {
-        if((1U << i) & pin) {
+    for (i = 0U; i < 16U; i++) {
+        if ((1U << i) & pin) {
             /* clear the specified pin output speed bits */
             ospeedr &= ~GPIO_OSPEED_MASK(i);
             /* set the specified pin output speed bits */
@@ -236,7 +236,7 @@ void gpio_bit_reset(uint32_t gpio_periph, uint32_t pin)
 */
 void gpio_bit_write(uint32_t gpio_periph, uint32_t pin, bit_status bit_value)
 {
-    if(RESET != bit_value) {
+    if (RESET != bit_value) {
         GPIO_BOP(gpio_periph) = (uint32_t)pin;
     } else {
         GPIO_BC(gpio_periph) = (uint32_t)pin;
@@ -270,7 +270,7 @@ void gpio_port_write(uint32_t gpio_periph, uint16_t data)
 */
 FlagStatus gpio_input_bit_get(uint32_t gpio_periph, uint32_t pin)
 {
-    if((uint32_t)RESET != (GPIO_ISTAT(gpio_periph) & (pin))) {
+    if ((uint32_t)RESET != (GPIO_ISTAT(gpio_periph) & (pin))) {
         return SET;
     } else {
         return RESET;
@@ -303,7 +303,7 @@ uint16_t gpio_input_port_get(uint32_t gpio_periph)
 */
 FlagStatus gpio_output_bit_get(uint32_t gpio_periph, uint32_t pin)
 {
-    if((uint32_t)RESET != (GPIO_OCTL(gpio_periph) & (pin))) {
+    if ((uint32_t)RESET != (GPIO_OCTL(gpio_periph) & (pin))) {
         return SET;
     } else {
         return RESET;
@@ -359,16 +359,16 @@ void gpio_af_set(uint32_t gpio_periph, uint32_t alt_func_num, uint32_t pin)
     afrl = GPIO_AFSEL0(gpio_periph);
     afrh = GPIO_AFSEL1(gpio_periph);
 
-    for(i = 0U; i < 8U; i++) {
-        if((1U << i) & pin) {
+    for (i = 0U; i < 8U; i++) {
+        if ((1U << i) & pin) {
             /* clear the specified pin alternate function bits */
             afrl &= ~GPIO_AFR_MASK(i);
             afrl |= GPIO_AFR_SET(i, alt_func_num);
         }
     }
 
-    for(i = 8U; i < 16U; i++) {
-        if((1U << i) & pin) {
+    for (i = 8U; i < 16U; i++) {
+        if ((1U << i) & pin) {
             /* clear the specified pin alternate function bits */
             afrh &= ~GPIO_AFR_MASK(i - 8U);
             afrh |= GPIO_AFR_SET(i - 8U, alt_func_num);

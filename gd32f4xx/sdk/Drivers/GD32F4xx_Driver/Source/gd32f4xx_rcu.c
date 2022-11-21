@@ -38,16 +38,16 @@ OF SUCH DAMAGE.
 #include "gd32f4xx_rcu.h"
 
 /* define clock source */
-#define SEL_IRC16M                  ((uint16_t)0U)                            /* IRC16M is selected as CK_SYS */
-#define SEL_HXTAL                   ((uint16_t)1U)                            /* HXTAL is selected as CK_SYS */
-#define SEL_PLLP                    ((uint16_t)2U)                            /* PLLP is selected as CK_SYS */
+#define SEL_IRC16M ((uint16_t)0U) /* IRC16M is selected as CK_SYS */
+#define SEL_HXTAL ((uint16_t)1U)  /* HXTAL is selected as CK_SYS */
+#define SEL_PLLP ((uint16_t)2U)   /* PLLP is selected as CK_SYS */
 /* define startup timeout count */
-#define OSC_STARTUP_TIMEOUT         ((uint32_t)0x000fffffU)
-#define LXTAL_STARTUP_TIMEOUT       ((uint32_t)0x0fffffffU)
+#define OSC_STARTUP_TIMEOUT ((uint32_t)0x000fffffU)
+#define LXTAL_STARTUP_TIMEOUT ((uint32_t)0x0fffffffU)
 
-/* RCU IRC16M adjust value mask and offset*/
-#define RCU_IRC16M_ADJUST_MASK      ((uint8_t)0x1FU)
-#define RCU_IRC16M_ADJUST_OFFSET    ((uint32_t)3U)
+/* RCU IRC16M adjust value mask and offset */
+#define RCU_IRC16M_ADJUST_MASK ((uint8_t)0x1FU)
+#define RCU_IRC16M_ADJUST_OFFSET ((uint32_t)3U)
 
 /*!
     \brief    deinitialize the RCU
@@ -63,13 +63,11 @@ void rcu_deinit(void)
     RCU_CFG0 &= ~RCU_CFG0_SCS;
 
     /* reset CTL register */
-    RCU_CTL &= ~(RCU_CTL_HXTALEN | RCU_CTL_CKMEN | RCU_CTL_PLLEN | RCU_CTL_PLLI2SEN
-                 | RCU_CTL_PLLSAIEN);
+    RCU_CTL &= ~(RCU_CTL_HXTALEN | RCU_CTL_CKMEN | RCU_CTL_PLLEN | RCU_CTL_PLLI2SEN | RCU_CTL_PLLSAIEN);
     RCU_CTL &= ~(RCU_CTL_HXTALBPS);
     /* reset CFG0 register */
-    RCU_CFG0 &= ~(RCU_CFG0_SCS | RCU_CFG0_AHBPSC | RCU_CFG0_APB1PSC | RCU_CFG0_APB2PSC |
-                  RCU_CFG0_RTCDIV | RCU_CFG0_CKOUT0SEL | RCU_CFG0_I2SSEL | RCU_CFG0_CKOUT0DIV |
-                  RCU_CFG0_CKOUT1DIV | RCU_CFG0_CKOUT1SEL);
+    RCU_CFG0 &= ~(RCU_CFG0_SCS | RCU_CFG0_AHBPSC | RCU_CFG0_APB1PSC | RCU_CFG0_APB2PSC | RCU_CFG0_RTCDIV |
+                  RCU_CFG0_CKOUT0SEL | RCU_CFG0_I2SSEL | RCU_CFG0_CKOUT0DIV | RCU_CFG0_CKOUT1DIV | RCU_CFG0_CKOUT1SEL);
     /* reset PLL register */
     RCU_PLL = 0x24003010U;
     /* reset PLLI2S register */
@@ -527,8 +525,8 @@ ErrStatus rcu_pll_config(uint32_t pll_src, uint32_t pll_psc, uint32_t pll_n, uin
     ss_modulation_reg = RCU_PLLSSCTL;
 
     /* calculate the minimum factor of PLLN */
-    if((ss_modulation_reg & RCU_PLLSSCTL_SSCGON) == RCU_PLLSSCTL_SSCGON) {
-        if((ss_modulation_reg & RCU_SS_TYPE_DOWN) == RCU_SS_TYPE_DOWN) {
+    if ((ss_modulation_reg & RCU_PLLSSCTL_SSCGON) == RCU_PLLSSCTL_SSCGON) {
+        if ((ss_modulation_reg & RCU_SS_TYPE_DOWN) == RCU_SS_TYPE_DOWN) {
             ss_modulation_inc += RCU_SS_MODULATION_DOWN_INC;
         } else {
             ss_modulation_inc += RCU_SS_MODULATION_CENTER_INC;
@@ -536,10 +534,9 @@ ErrStatus rcu_pll_config(uint32_t pll_src, uint32_t pll_psc, uint32_t pll_n, uin
     }
 
     /* check the function parameter */
-    if(CHECK_PLL_PSC_VALID(pll_psc) && CHECK_PLL_N_VALID(pll_n, ss_modulation_inc) &&
-            CHECK_PLL_P_VALID(pll_p) && CHECK_PLL_Q_VALID(pll_q)) {
-        RCU_PLL = pll_psc | (pll_n << 6) | (((pll_p >> 1) - 1U) << 16) |
-                  (pll_src) | (pll_q << 24);
+    if (CHECK_PLL_PSC_VALID(pll_psc) && CHECK_PLL_N_VALID(pll_n, ss_modulation_inc) && CHECK_PLL_P_VALID(pll_p) &&
+        CHECK_PLL_Q_VALID(pll_q)) {
+        RCU_PLL = pll_psc | (pll_n << 0x6) | (((pll_p >> 1) - 1U) << 0x10) | (pll_src) | (pll_q << 0x18);
     } else {
         /* return status */
         return ERROR;
@@ -561,8 +558,8 @@ ErrStatus rcu_pll_config(uint32_t pll_src, uint32_t pll_psc, uint32_t pll_n, uin
 ErrStatus rcu_plli2s_config(uint32_t plli2s_n, uint32_t plli2s_r)
 {
     /* check the function parameter */
-    if(CHECK_PLLI2S_N_VALID(plli2s_n) && CHECK_PLLI2S_R_VALID(plli2s_r)) {
-        RCU_PLLI2S = (plli2s_n << 6) | (plli2s_r << 28);
+    if (CHECK_PLLI2S_N_VALID(plli2s_n) && CHECK_PLLI2S_R_VALID(plli2s_r)) {
+        RCU_PLLI2S = (plli2s_n << 0x6) | (plli2s_r << 0x1C);
     } else {
         /* return status */
         return ERROR;
@@ -586,7 +583,7 @@ ErrStatus rcu_plli2s_config(uint32_t plli2s_n, uint32_t plli2s_r)
 ErrStatus rcu_pllsai_config(uint32_t pllsai_n, uint32_t pllsai_p, uint32_t pllsai_r)
 {
     /* check the function parameter */
-    if(CHECK_PLLSAI_N_VALID(pllsai_n) && CHECK_PLLSAI_P_VALID(pllsai_p) && CHECK_PLLSAI_R_VALID(pllsai_r)) {
+    if (CHECK_PLLSAI_N_VALID(pllsai_n) && CHECK_PLLSAI_P_VALID(pllsai_p) && CHECK_PLLSAI_R_VALID(pllsai_r)) {
         RCU_PLLSAI = (pllsai_n << 6U) | (((pllsai_p >> 1U) - 1U) << 16U) | (pllsai_r << 28U);
     } else {
         /* return status */
@@ -636,7 +633,6 @@ void rcu_rtc_div_config(uint32_t rtc_div)
     reg &= ~RCU_CFG0_RTCDIV;
     RCU_CFG0 = (reg | rtc_div);
 }
-
 
 /*!
     \brief    configure the I2S clock source selection
@@ -700,20 +696,18 @@ void rcu_pll48m_clock_config(uint32_t pll48m_clock_source)
     \param[in]  timer_clock_prescaler: TIMER clock selection
                 only one parameter can be selected which is shown as below:
       \arg        RCU_TIMER_PSC_MUL2: if APB1PSC/APB2PSC in RCU_CFG0 register is 0b0xx(CK_APBx = CK_AHB)
-                                      or 0b100(CK_APBx = CK_AHB/2), the TIMER clock is equal to CK_AHB(CK_TIMERx = CK_AHB).
-                                      or else, the TIMER clock is twice the corresponding APB clock (TIMER in APB1 domain: CK_TIMERx = 2 x CK_APB1;
-                                      TIMER in APB2 domain: CK_TIMERx = 2 x CK_APB2)
-      \arg        RCU_TIMER_PSC_MUL4: if APB1PSC/APB2PSC in RCU_CFG0 register is 0b0xx(CK_APBx = CK_AHB),
-                                      0b100(CK_APBx = CK_AHB/2), or 0b101(CK_APBx = CK_AHB/4), the TIMER clock is equal to CK_AHB(CK_TIMERx = CK_AHB).
-                                      or else, the TIMER clock is four timers the corresponding APB clock (TIMER in APB1 domain: CK_TIMERx = 4 x CK_APB1;
-                                      TIMER in APB2 domain: CK_TIMERx = 4 x CK_APB2)
-    \param[out] none
+                                      or 0b100(CK_APBx = CK_AHB/2), the TIMER clock is equal to CK_AHB(CK_TIMERx =
+   CK_AHB). or else, the TIMER clock is twice the corresponding APB clock (TIMER in APB1 domain: CK_TIMERx = 2 x
+   CK_APB1; TIMER in APB2 domain: CK_TIMERx = 2 x CK_APB2) \arg        RCU_TIMER_PSC_MUL4: if APB1PSC/APB2PSC in
+   RCU_CFG0 register is 0b0xx(CK_APBx = CK_AHB), 0b100(CK_APBx = CK_AHB/2), or 0b101(CK_APBx = CK_AHB/4), the TIMER
+   clock is equal to CK_AHB(CK_TIMERx = CK_AHB). or else, the TIMER clock is four timers the corresponding APB clock
+   (TIMER in APB1 domain: CK_TIMERx = 4 x CK_APB1; TIMER in APB2 domain: CK_TIMERx = 4 x CK_APB2) \param[out] none
     \retval     none
 */
 void rcu_timer_clock_prescaler_config(uint32_t timer_clock_prescaler)
 {
     /* configure the TIMERSEL bit and select the TIMER clock prescaler */
-    if(timer_clock_prescaler == RCU_TIMER_PSC_MUL2) {
+    if (timer_clock_prescaler == RCU_TIMER_PSC_MUL2) {
         RCU_CFG1 &= timer_clock_prescaler;
     } else {
         RCU_CFG1 |= timer_clock_prescaler;
@@ -773,112 +767,124 @@ void rcu_lxtal_drive_capability_config(uint32_t lxtal_dricap)
     \param[out] none
     \retval     ErrStatus: SUCCESS or ERROR
 */
+ErrStatus rcu_osci_stab_wait_half_switch(rcu_osci_type_enum osci)
+{
+    uint32_t stb_cnt = 0U;
+    ErrStatus reval = ERROR;
+    FlagStatus osci_stat = RESET;
+    switch (osci) {
+        /* wait HXTAL stable */
+        case RCU_HXTAL:
+            while ((RESET == osci_stat) && (HXTAL_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_HXTALSTB);
+                stb_cnt++;
+            }
+
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_HXTALSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        /* wait LXTAL stable */
+        case RCU_LXTAL:
+            while ((RESET == osci_stat) && (LXTAL_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_LXTALSTB);
+                stb_cnt++;
+            }
+
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_LXTALSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        /* wait IRC16M stable */
+        case RCU_IRC16M:
+            while ((RESET == osci_stat) && (IRC16M_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_IRC16MSTB);
+                stb_cnt++;
+            }
+
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_IRC16MSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        /* wait IRC48M stable */
+        case RCU_IRC48M:
+            while ((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_IRC48MSTB);
+                stb_cnt++;
+            }
+
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_IRC48MSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        default:
+            break;
+    }
+    /* return value */
+    return reval;
+}
 ErrStatus rcu_osci_stab_wait(rcu_osci_type_enum osci)
 {
     uint32_t stb_cnt = 0U;
     ErrStatus reval = ERROR;
     FlagStatus osci_stat = RESET;
+    reval = rcu_osci_stab_wait_half_switch(osci);
+    switch (osci) {
+        /* wait IRC32K stable */
+        case RCU_IRC32K:
+            while ((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_IRC32KSTB);
+                stb_cnt++;
+            }
 
-    switch(osci) {
-    /* wait HXTAL stable */
-    case RCU_HXTAL:
-        while((RESET == osci_stat) && (HXTAL_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_HXTALSTB);
-            stb_cnt++;
-        }
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_IRC32KSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        /* wait PLL stable */
+        case RCU_PLL_CK:
+            while ((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_PLLSTB);
+                stb_cnt++;
+            }
 
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_HXTALSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait LXTAL stable */
-    case RCU_LXTAL:
-        while((RESET == osci_stat) && (LXTAL_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_LXTALSTB);
-            stb_cnt++;
-        }
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_PLLSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        /* wait PLLI2S stable */
+        case RCU_PLLI2S_CK:
+            while ((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_PLLI2SSTB);
+                stb_cnt++;
+            }
 
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_LXTALSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait IRC16M stable */
-    case RCU_IRC16M:
-        while((RESET == osci_stat) && (IRC16M_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_IRC16MSTB);
-            stb_cnt++;
-        }
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_PLLI2SSTB)) {
+                reval = SUCCESS;
+            }
+            break;
+        /* wait PLLSAI stable */
+        case RCU_PLLSAI_CK:
+            while ((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
+                osci_stat = rcu_flag_get(RCU_FLAG_PLLSAISTB);
+                stb_cnt++;
+            }
 
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_IRC16MSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait IRC48M stable */
-    case RCU_IRC48M:
-        while((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_IRC48MSTB);
-            stb_cnt++;
-        }
+            /* check whether flag is set */
+            if (RESET != rcu_flag_get(RCU_FLAG_PLLSAISTB)) {
+                reval = SUCCESS;
+            }
+            break;
 
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_IRC48MSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait IRC32K stable */
-    case RCU_IRC32K:
-        while((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_IRC32KSTB);
-            stb_cnt++;
-        }
-
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_IRC32KSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait PLL stable */
-    case RCU_PLL_CK:
-        while((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_PLLSTB);
-            stb_cnt++;
-        }
-
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_PLLSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait PLLI2S stable */
-    case RCU_PLLI2S_CK:
-        while((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_PLLI2SSTB);
-            stb_cnt++;
-        }
-
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_PLLI2SSTB)) {
-            reval = SUCCESS;
-        }
-        break;
-    /* wait PLLSAI stable */
-    case RCU_PLLSAI_CK:
-        while((RESET == osci_stat) && (OSC_STARTUP_TIMEOUT != stb_cnt)) {
-            osci_stat = rcu_flag_get(RCU_FLAG_PLLSAISTB);
-            stb_cnt++;
-        }
-
-        /* check whether flag is set */
-        if(RESET != rcu_flag_get(RCU_FLAG_PLLSAISTB)) {
-            reval = SUCCESS;
-        }
-        break;
-
-    default:
-        break;
+        default:
+            break;
     }
 
     /* return value */
@@ -938,28 +944,28 @@ void rcu_osci_bypass_mode_enable(rcu_osci_type_enum osci)
 {
     uint32_t reg;
 
-    switch(osci) {
-    /* enable HXTAL to bypass mode */
-    case RCU_HXTAL:
-        reg = RCU_CTL;
-        RCU_CTL &= ~RCU_CTL_HXTALEN;
-        RCU_CTL = (reg | RCU_CTL_HXTALBPS);
-        break;
-    /* enable LXTAL to bypass mode */
-    case RCU_LXTAL:
-        reg = RCU_BDCTL;
-        RCU_BDCTL &= ~RCU_BDCTL_LXTALEN;
-        RCU_BDCTL = (reg | RCU_BDCTL_LXTALBPS);
-        break;
-    case RCU_IRC16M:
-    case RCU_IRC48M:
-    case RCU_IRC32K:
-    case RCU_PLL_CK:
-    case RCU_PLLI2S_CK:
-    case RCU_PLLSAI_CK:
-        break;
-    default:
-        break;
+    switch (osci) {
+        /* enable HXTAL to bypass mode */
+        case RCU_HXTAL:
+            reg = RCU_CTL;
+            RCU_CTL &= ~RCU_CTL_HXTALEN;
+            RCU_CTL = (reg | RCU_CTL_HXTALBPS);
+            break;
+        /* enable LXTAL to bypass mode */
+        case RCU_LXTAL:
+            reg = RCU_BDCTL;
+            RCU_BDCTL &= ~RCU_BDCTL_LXTALEN;
+            RCU_BDCTL = (reg | RCU_BDCTL_LXTALBPS);
+            break;
+        case RCU_IRC16M:
+        case RCU_IRC48M:
+        case RCU_IRC32K:
+        case RCU_PLL_CK:
+        case RCU_PLLI2S_CK:
+        case RCU_PLLSAI_CK:
+            break;
+        default:
+            break;
     }
 }
 
@@ -976,28 +982,28 @@ void rcu_osci_bypass_mode_disable(rcu_osci_type_enum osci)
 {
     uint32_t reg;
 
-    switch(osci) {
-    /* disable HXTAL to bypass mode */
-    case RCU_HXTAL:
-        reg = RCU_CTL;
-        RCU_CTL &= ~RCU_CTL_HXTALEN;
-        RCU_CTL = (reg & ~RCU_CTL_HXTALBPS);
-        break;
-    /* disable LXTAL to bypass mode */
-    case RCU_LXTAL:
-        reg = RCU_BDCTL;
-        RCU_BDCTL &= ~RCU_BDCTL_LXTALEN;
-        RCU_BDCTL = (reg & ~RCU_BDCTL_LXTALBPS);
-        break;
-    case RCU_IRC16M:
-    case RCU_IRC48M:
-    case RCU_IRC32K:
-    case RCU_PLL_CK:
-    case RCU_PLLI2S_CK:
-    case RCU_PLLSAI_CK:
-        break;
-    default:
-        break;
+    switch (osci) {
+        /* disable HXTAL to bypass mode */
+        case RCU_HXTAL:
+            reg = RCU_CTL;
+            RCU_CTL &= ~RCU_CTL_HXTALEN;
+            RCU_CTL = (reg & ~RCU_CTL_HXTALBPS);
+            break;
+        /* disable LXTAL to bypass mode */
+        case RCU_LXTAL:
+            reg = RCU_BDCTL;
+            RCU_BDCTL &= ~RCU_BDCTL_LXTALEN;
+            RCU_BDCTL = (reg & ~RCU_BDCTL_LXTALBPS);
+            break;
+        case RCU_IRC16M:
+        case RCU_IRC48M:
+        case RCU_IRC32K:
+        case RCU_PLL_CK:
+        case RCU_PLLI2S_CK:
+        case RCU_PLLSAI_CK:
+            break;
+        default:
+            break;
     }
 }
 
@@ -1024,11 +1030,10 @@ void rcu_irc16m_adjust_value_set(uint32_t irc16m_adjval)
       \arg        RCU_SS_TYPE_CENTER: center spread type is selected
       \arg        RCU_SS_TYPE_DOWN: down spread type is selected
     \param[in]  modstep: configure PLL spread spectrum modulation profile amplitude and frequency
-      \arg        This parameter should be selected between 0 and 7FFF.The following criteria must be met: MODSTEP*MODCNT <=2^15-1
-    \param[in]  modcnt: configure PLL spread spectrum modulation profile amplitude and frequency
-      \arg        This parameter should be selected between 0 and 1FFF.The following criteria must be met: MODSTEP*MODCNT <=2^15-1
-    \param[out] none
-    \retval     none
+      \arg        This parameter should be selected between 0 and 7FFF.The following criteria must be met:
+   MODSTEP*MODCNT <=2^15-1 \param[in]  modcnt: configure PLL spread spectrum modulation profile amplitude and frequency
+      \arg        This parameter should be selected between 0 and 1FFF.The following criteria must be met:
+   MODSTEP*MODCNT <=2^15-1 \param[out] none \retval     none
 */
 void rcu_spread_spectrum_config(uint32_t spread_spectrum_type, uint32_t modstep, uint32_t modcnt)
 {
@@ -1037,7 +1042,7 @@ void rcu_spread_spectrum_config(uint32_t spread_spectrum_type, uint32_t modstep,
     reg = RCU_PLLSSCTL;
     /* reset the RCU_PLLSSCTL register bits */
     reg &= ~(RCU_PLLSSCTL_MODCNT | RCU_PLLSSCTL_MODSTEP | RCU_PLLSSCTL_SS_TYPE);
-    RCU_PLLSSCTL = (reg | spread_spectrum_type | modstep << 13 | modcnt);
+    RCU_PLLSSCTL = (reg | spread_spectrum_type | (modstep << 0xD) | modcnt);
 }
 
 /*!
@@ -1124,6 +1129,29 @@ void rcu_deepsleep_voltage_set(uint32_t dsvol)
     \param[out] none
     \retval     clock frequency of system, AHB, APB1, APB2
 */
+uint32_t ck_freq_get(uint32_t cksys_freq, uint32_t ahb_freq, uint32_t apb1_freq,
+                     uint32_t apb2_freq, rcu_clock_freq_enum clock)
+{
+    uint32_t ck_freq = 0U;
+    /* return the clocks frequency */
+    switch (clock) {
+        case CK_SYS:
+            ck_freq = cksys_freq;
+            break;
+        case CK_AHB:
+            ck_freq = ahb_freq;
+            break;
+        case CK_APB1:
+            ck_freq = apb1_freq;
+            break;
+        case CK_APB2:
+            ck_freq = apb2_freq;
+            break;
+        default:
+            break;
+    }
+    return ck_freq;
+}
 uint32_t rcu_clock_freq_get(rcu_clock_freq_enum clock)
 {
     uint32_t sws, ck_freq = 0U;
@@ -1135,68 +1163,55 @@ uint32_t rcu_clock_freq_get(rcu_clock_freq_enum clock)
     const uint8_t apb1_exp[8] = {0, 0, 0, 0, 1, 2, 3, 4};
     const uint8_t apb2_exp[8] = {0, 0, 0, 0, 1, 2, 3, 4};
 
-    sws = GET_BITS(RCU_CFG0, 2, 3);
-    switch(sws) {
-    /* IRC16M is selected as CK_SYS */
-    case SEL_IRC16M:
-        cksys_freq = IRC16M_VALUE;
-        break;
-    /* HXTAL is selected as CK_SYS */
-    case SEL_HXTAL:
-        cksys_freq = HXTAL_VALUE;
-        break;
-    /* PLLP is selected as CK_SYS */
-    case SEL_PLLP:
-        /* get the value of PLLPSC[5:0] */
-        pllpsc = GET_BITS(RCU_PLL, 0U, 5U);
-        plln = GET_BITS(RCU_PLL, 6U, 14U);
-        pllp = (GET_BITS(RCU_PLL, 16U, 17U) + 1U) * 2U;
-        /* PLL clock source selection, HXTAL or IRC16M/2 */
-        pllsel = (RCU_PLL & RCU_PLL_PLLSEL);
-        if(RCU_PLLSRC_HXTAL == pllsel) {
-            ck_src = HXTAL_VALUE;
-        } else {
-            ck_src = IRC16M_VALUE;
-        }
-        cksys_freq = ((ck_src / pllpsc) * plln) / pllp;
-        break;
-    /* IRC16M is selected as CK_SYS */
-    default:
-        cksys_freq = IRC16M_VALUE;
-        break;
+    sws = GET_BITS(RCU_CFG0, 0x2, 0x3);
+    switch (sws) {
+        /* IRC16M is selected as CK_SYS */
+        case SEL_IRC16M:
+            cksys_freq = IRC16M_VALUE;
+            break;
+        /* HXTAL is selected as CK_SYS */
+        case SEL_HXTAL:
+            cksys_freq = HXTAL_VALUE;
+            break;
+        /* PLLP is selected as CK_SYS */
+        case SEL_PLLP:
+            /* get the value of PLLPSC[5:0] */
+            pllpsc = GET_BITS(RCU_PLL, 0U, 5U);
+            plln = GET_BITS(RCU_PLL, 6U, 14U);
+            pllp = (GET_BITS(RCU_PLL, 16U, 17U) + 1U) * 2U;
+            /* PLL clock source selection, HXTAL or IRC16M/2 */
+            pllsel = (RCU_PLL & RCU_PLL_PLLSEL);
+            if (RCU_PLLSRC_HXTAL == pllsel) {
+                ck_src = HXTAL_VALUE;
+            } else {
+                ck_src = IRC16M_VALUE;
+            }
+            if (pllpsc == 0 || pllp == 0) {
+                return 0;
+            }
+            cksys_freq = ((ck_src / pllpsc) * plln) / pllp;
+            break;
+        /* IRC16M is selected as CK_SYS */
+        default:
+            cksys_freq = IRC16M_VALUE;
+            break;
     }
     /* calculate AHB clock frequency */
-    idx = GET_BITS(RCU_CFG0, 4, 7);
+    idx = GET_BITS(RCU_CFG0, 0x4, 0x7);
     clk_exp = ahb_exp[idx];
     ahb_freq = cksys_freq >> clk_exp;
 
     /* calculate APB1 clock frequency */
-    idx = GET_BITS(RCU_CFG0, 10, 12);
+    idx = GET_BITS(RCU_CFG0, 0xA, 0xC);
     clk_exp = apb1_exp[idx];
     apb1_freq = ahb_freq >> clk_exp;
 
     /* calculate APB2 clock frequency */
-    idx = GET_BITS(RCU_CFG0, 13, 15);
+    idx = GET_BITS(RCU_CFG0, 0xD, 0xF);
     clk_exp = apb2_exp[idx];
     apb2_freq = ahb_freq >> clk_exp;
 
-    /* return the clocks frequency */
-    switch(clock) {
-    case CK_SYS:
-        ck_freq = cksys_freq;
-        break;
-    case CK_AHB:
-        ck_freq = ahb_freq;
-        break;
-    case CK_APB1:
-        ck_freq = apb1_freq;
-        break;
-    case CK_APB2:
-        ck_freq = apb2_freq;
-        break;
-    default:
-        break;
-    }
+    ck_freq = ck_freq_get(cksys_freq, ahb_freq, apb1_freq, apb2_freq, clock);
     return ck_freq;
 }
 
@@ -1225,7 +1240,7 @@ uint32_t rcu_clock_freq_get(rcu_clock_freq_enum clock)
 FlagStatus rcu_flag_get(rcu_flag_enum flag)
 {
     /* get the rcu flag */
-    if(RESET != (RCU_REG_VAL(flag) & BIT(RCU_BIT_POS(flag)))) {
+    if (RESET != (RCU_REG_VAL(flag) & BIT(RCU_BIT_POS(flag)))) {
         return SET;
     } else {
         return RESET;
@@ -1262,7 +1277,7 @@ void rcu_all_reset_flag_clear(void)
 FlagStatus rcu_interrupt_flag_get(rcu_int_flag_enum int_flag)
 {
     /* get the rcu interrupt flag */
-    if(RESET != (RCU_REG_VAL(int_flag) & BIT(RCU_BIT_POS(int_flag)))) {
+    if (RESET != (RCU_REG_VAL(int_flag) & BIT(RCU_BIT_POS(int_flag)))) {
         return SET;
     } else {
         return RESET;
@@ -1309,7 +1324,6 @@ void rcu_interrupt_enable(rcu_int_enum interrupt)
 {
     RCU_REG_VAL(interrupt) |= BIT(RCU_BIT_POS(interrupt));
 }
-
 
 /*!
     \brief    disable the stabilization interrupt

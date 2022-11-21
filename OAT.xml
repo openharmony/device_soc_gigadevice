@@ -27,7 +27,7 @@
 				<policyitem type="copyright" name="ARM Limited. All rights reserved." path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="Developed By ARM"/>
 				<policyitem type="copyright" name="GigaDevice" path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="Developed By GigaDevice"/>
 				<policyitem type="license" name="BSD-3-Clause" path=".*" desc="BSD license"/>
-				<policyitem type="license" name="BSD-3-Clause" path=".*" desc="兼容license"/>
+                <policyitem type="license" name="BSD" path=".*" desc="Developed By GigaDevice"/>
                 <!--policyitem type="compatibility" name="GPL-2.0+" path="abc/.*" desc="Process that runs independently, invoked by the X process."/-->
                 <!--policyitem type="license" name="LGPL" path="abc/.*" desc="Dynamically linked by module X"/-->
                 <!--policyitem type="copyright" name="xxx" path="abc/.*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="Developed by X Company"/-->
