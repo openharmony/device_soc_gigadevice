@@ -37,7 +37,7 @@ OF SUCH DAMAGE.
 
 #include "gd32f4xx_ipa.h"
 
-#define IPA_DEFAULT_VALUE   0x00000000U
+#define IPA_DEFAULT_VALUE 0x00000000U
 
 /*!
     \brief    deinitialize IPA registers
@@ -153,7 +153,8 @@ void ipa_pixel_format_convert_mode_set(uint32_t pfcm)
                   foreground_lineoff: foreground line offset
                   foreground_prealpha: foreground pre-defined alpha value
                   foreground_alpha_algorithm: IPA_FG_ALPHA_MODE_0,IPA_FG_ALPHA_MODE_1,IPA_FG_ALPHA_MODE_2
-                  foreground_pf: foreground pixel format(FOREGROUND_PPF_ARGB8888,FOREGROUND_PPF_RGB888,FOREGROUND_PPF_RGB565,
+                  foreground_pf: foreground pixel
+   format(FOREGROUND_PPF_ARGB8888,FOREGROUND_PPF_RGB888,FOREGROUND_PPF_RGB565,
                             FOREGROUND_PPF_ARG1555,FOREGROUND_PPF_ARGB4444,FOREGROUND_PPF_L8,FOREGROUND_PPF_AL44,
                             FOREGROUND_PPF_AL88,FOREGROUND_PPF_L4,FOREGROUND_PPF_A8,FOREGROUND_PPF_A4)
                   foreground_prered: foreground pre-defined red value
@@ -181,7 +182,8 @@ void ipa_foreground_struct_para_init(ipa_foreground_parameter_struct *foreground
                   foreground_lineoff: foreground line offset
                   foreground_prealpha: foreground pre-defined alpha value
                   foreground_alpha_algorithm: IPA_FG_ALPHA_MODE_0,IPA_FG_ALPHA_MODE_1,IPA_FG_ALPHA_MODE_2
-                  foreground_pf: foreground pixel format(FOREGROUND_PPF_ARGB8888,FOREGROUND_PPF_RGB888,FOREGROUND_PPF_RGB565,
+                  foreground_pf: foreground pixel
+   format(FOREGROUND_PPF_ARGB8888,FOREGROUND_PPF_RGB888,FOREGROUND_PPF_RGB565,
                             FOREGROUND_PPF_ARG1555,FOREGROUND_PPF_ARGB4444,FOREGROUND_PPF_L8,FOREGROUND_PPF_AL44,
                             FOREGROUND_PPF_AL88,FOREGROUND_PPF_L4,FOREGROUND_PPF_A8,FOREGROUND_PPF_A4)
                   foreground_prered: foreground pre-defined red value
@@ -193,7 +195,7 @@ void ipa_foreground_struct_para_init(ipa_foreground_parameter_struct *foreground
 void ipa_foreground_init(ipa_foreground_parameter_struct *foreground_struct)
 {
     FlagStatus tempflag = RESET;
-    if(RESET != (IPA_CTL & IPA_CTL_TEN)) {
+    if (RESET != (IPA_CTL & IPA_CTL_TEN)) {
         tempflag = SET;
         /* reset the TEN in order to configure the following bits */
         IPA_CTL &= ~IPA_CTL_TEN;
@@ -212,10 +214,10 @@ void ipa_foreground_init(ipa_foreground_parameter_struct *foreground_struct)
     IPA_FPCTL |= foreground_struct->foreground_pf;
     /* foreground pre-defined red green blue configuration */
     IPA_FPV &= ~(IPA_FPV_FPDRV | IPA_FPV_FPDGV | IPA_FPV_FPDBV);
-    IPA_FPV |= ((foreground_struct->foreground_prered << 16U) | (foreground_struct->foreground_pregreen << 8U)
-                | (foreground_struct->foreground_preblue));
+    IPA_FPV |= ((foreground_struct->foreground_prered << 16U) | (foreground_struct->foreground_pregreen << 8U) |
+                (foreground_struct->foreground_preblue));
 
-    if(SET == tempflag) {
+    if (SET == tempflag) {
         /* restore the state of TEN */
         IPA_CTL |= IPA_CTL_TEN;
     }
@@ -230,7 +232,8 @@ void ipa_foreground_init(ipa_foreground_parameter_struct *foreground_struct)
                   background_lineoff: background line offset
                   background_prealpha: background pre-defined alpha value
                   background_alpha_algorithm: IPA_BG_ALPHA_MODE_0,IPA_BG_ALPHA_MODE_1,IPA_BG_ALPHA_MODE_2
-                  background_pf: background pixel format(BACKGROUND_PPF_ARGB8888,BACKGROUND_PPF_RGB888,BACKGROUND_PPF_RGB565,
+                  background_pf: background pixel
+   format(BACKGROUND_PPF_ARGB8888,BACKGROUND_PPF_RGB888,BACKGROUND_PPF_RGB565,
                             BACKGROUND_PPF_ARG1555,BACKGROUND_PPF_ARGB4444,BACKGROUND_PPF_L8,BACKGROUND_PPF_AL44,
                             BACKGROUND_PPF_AL88,BACKGROUND_PPF_L4,BACKGROUND_PPF_A8,BACKGROUND_PPF_A4)
                   background_prered: background pre-defined red value
@@ -258,7 +261,8 @@ void ipa_background_struct_para_init(ipa_background_parameter_struct *background
                   background_lineoff: background line offset
                   background_prealpha: background pre-defined alpha value
                   background_alpha_algorithm: IPA_BG_ALPHA_MODE_0,IPA_FG_ALPHA_MODE_1,IPA_FG_ALPHA_MODE_2
-                  background_pf: background pixel format(BACKGROUND_PPF_ARGB8888,BACKGROUND_PPF_RGB888,BACKGROUND_PPF_RGB565,
+                  background_pf: background pixel
+   format(BACKGROUND_PPF_ARGB8888,BACKGROUND_PPF_RGB888,BACKGROUND_PPF_RGB565,
                             BACKGROUND_PPF_ARG1555,BACKGROUND_PPF_ARGB4444,BACKGROUND_PPF_L8,BACKGROUND_PPF_AL44,
                             BACKGROUND_PPF_AL88,BACKGROUND_PPF_L4,BACKGROUND_PPF_A8,BACKGROUND_PPF_A4)
                   background_prered: background pre-defined red value
@@ -270,7 +274,7 @@ void ipa_background_struct_para_init(ipa_background_parameter_struct *background
 void ipa_background_init(ipa_background_parameter_struct *background_struct)
 {
     FlagStatus tempflag = RESET;
-    if(RESET != (IPA_CTL & IPA_CTL_TEN)) {
+    if (RESET != (IPA_CTL & IPA_CTL_TEN)) {
         tempflag = SET;
         /* reset the TEN in order to configure the following bits */
         IPA_CTL &= ~IPA_CTL_TEN;
@@ -289,10 +293,10 @@ void ipa_background_init(ipa_background_parameter_struct *background_struct)
     IPA_BPCTL |= background_struct->background_pf;
     /* background pre-defined red green blue configuration */
     IPA_BPV &= ~(IPA_BPV_BPDRV | IPA_BPV_BPDGV | IPA_BPV_BPDBV);
-    IPA_BPV |= ((background_struct->background_prered << 16U) | (background_struct->background_pregreen << 8U)
-                | (background_struct->background_preblue));
+    IPA_BPV |= ((background_struct->background_prered << 16U) | (background_struct->background_pregreen << 8U) |
+                (background_struct->background_preblue));
 
-    if(SET == tempflag) {
+    if (SET == tempflag) {
         /* restore the state of TEN */
         IPA_CTL |= IPA_CTL_TEN;
     }
@@ -349,7 +353,7 @@ void ipa_destination_init(ipa_destination_parameter_struct *destination_struct)
 {
     uint32_t destination_pixelformat;
     FlagStatus tempflag = RESET;
-    if(RESET != (IPA_CTL & IPA_CTL_TEN)) {
+    if (RESET != (IPA_CTL & IPA_CTL_TEN)) {
         tempflag = SET;
         /* reset the TEN in order to configure the following bits */
         IPA_CTL &= ~IPA_CTL_TEN;
@@ -360,41 +364,41 @@ void ipa_destination_init(ipa_destination_parameter_struct *destination_struct)
     IPA_DPCTL = destination_struct->destination_pf;
     destination_pixelformat = destination_struct->destination_pf;
     /* destination pixel format ARGB8888 */
-    switch(destination_pixelformat) {
-    case IPA_DPF_ARGB8888:
-        IPA_DPV &= ~(IPA_DPV_DPDBV_0 | (IPA_DPV_DPDGV_0) | (IPA_DPV_DPDRV_0) | (IPA_DPV_DPDAV_0));
-        IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 8U)
-                   | (destination_struct->destination_prered << 16U)
-                   | (destination_struct->destination_prealpha << 24U));
-        break;
-    /* destination pixel format RGB888 */
-    case IPA_DPF_RGB888:
-        IPA_DPV &= ~(IPA_DPV_DPDBV_1 | (IPA_DPV_DPDGV_1) | (IPA_DPV_DPDRV_1));
-        IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 8U)
-                   | (destination_struct->destination_prered << 16U));
-        break;
-    /* destination pixel format RGB565 */
-    case IPA_DPF_RGB565:
-        IPA_DPV &= ~(IPA_DPV_DPDBV_2 | (IPA_DPV_DPDGV_2) | (IPA_DPV_DPDRV_2));
-        IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 5U)
-                   | (destination_struct->destination_prered << 11U));
-        break;
-    /* destination pixel format ARGB1555 */
-    case IPA_DPF_ARGB1555:
-        IPA_DPV &= ~(IPA_DPV_DPDBV_3 | (IPA_DPV_DPDGV_3) | (IPA_DPV_DPDRV_3) | (IPA_DPV_DPDAV_3));
-        IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 5U)
-                   | (destination_struct->destination_prered << 10U)
-                   | (destination_struct->destination_prealpha << 15U));
-        break;
-    /* destination pixel format ARGB4444 */
-    case IPA_DPF_ARGB4444:
-        IPA_DPV &= ~(IPA_DPV_DPDBV_4 | (IPA_DPV_DPDGV_4) | (IPA_DPV_DPDRV_4) | (IPA_DPV_DPDAV_4));
-        IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 4U)
-                   | (destination_struct->destination_prered << 8U)
-                   | (destination_struct->destination_prealpha << 12U));
-        break;
-    default:
-        break;
+    switch (destination_pixelformat) {
+        case IPA_DPF_ARGB8888:
+            IPA_DPV &= ~(IPA_DPV_DPDBV_0 | (IPA_DPV_DPDGV_0) | (IPA_DPV_DPDRV_0) | (IPA_DPV_DPDAV_0));
+            IPA_DPV =
+                (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 8U) |
+                 (destination_struct->destination_prered << 16U) | (destination_struct->destination_prealpha << 24U));
+            break;
+        /* destination pixel format RGB888 */
+        case IPA_DPF_RGB888:
+            IPA_DPV &= ~(IPA_DPV_DPDBV_1 | (IPA_DPV_DPDGV_1) | (IPA_DPV_DPDRV_1));
+            IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 8U) |
+                       (destination_struct->destination_prered << 16U));
+            break;
+        /* destination pixel format RGB565 */
+        case IPA_DPF_RGB565:
+            IPA_DPV &= ~(IPA_DPV_DPDBV_2 | (IPA_DPV_DPDGV_2) | (IPA_DPV_DPDRV_2));
+            IPA_DPV = (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 5U) |
+                       (destination_struct->destination_prered << 11U));
+            break;
+        /* destination pixel format ARGB1555 */
+        case IPA_DPF_ARGB1555:
+            IPA_DPV &= ~(IPA_DPV_DPDBV_3 | (IPA_DPV_DPDGV_3) | (IPA_DPV_DPDRV_3) | (IPA_DPV_DPDAV_3));
+            IPA_DPV =
+                (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 5U) |
+                 (destination_struct->destination_prered << 10U) | (destination_struct->destination_prealpha << 15U));
+            break;
+        /* destination pixel format ARGB4444 */
+        case IPA_DPF_ARGB4444:
+            IPA_DPV &= ~(IPA_DPV_DPDBV_4 | (IPA_DPV_DPDGV_4) | (IPA_DPV_DPDRV_4) | (IPA_DPV_DPDAV_4));
+            IPA_DPV =
+                (destination_struct->destination_preblue | (destination_struct->destination_pregreen << 4U) |
+                 (destination_struct->destination_prered << 8U) | (destination_struct->destination_prealpha << 12U));
+            break;
+        default:
+            break;
     }
     /* destination memory base address configuration */
     IPA_DMADDR &= ~(IPA_DMADDR_DMADDR);
@@ -406,7 +410,7 @@ void ipa_destination_init(ipa_destination_parameter_struct *destination_struct)
     IPA_IMS &= ~(IPA_IMS_HEIGHT | IPA_IMS_WIDTH);
     IPA_IMS |= ((destination_struct->image_width << 16U) | (destination_struct->image_height));
 
-    if(SET == tempflag) {
+    if (SET == tempflag) {
         /* restore the state of TEN */
         IPA_CTL |= IPA_CTL_TEN;
     }
@@ -423,7 +427,7 @@ void ipa_destination_init(ipa_destination_parameter_struct *destination_struct)
 void ipa_foreground_lut_init(uint8_t fg_lut_num, uint8_t fg_lut_pf, uint32_t fg_lut_addr)
 {
     FlagStatus tempflag = RESET;
-    if(RESET != (IPA_FPCTL & IPA_FPCTL_FLLEN)) {
+    if (RESET != (IPA_FPCTL & IPA_FPCTL_FLLEN)) {
         tempflag = SET;
         /* reset the FLLEN in order to configure the following bits */
         IPA_FPCTL &= ~IPA_FPCTL_FLLEN;
@@ -432,7 +436,7 @@ void ipa_foreground_lut_init(uint8_t fg_lut_num, uint8_t fg_lut_pf, uint32_t fg_
     /* foreground LUT number of pixel configuration */
     IPA_FPCTL |= ((uint32_t)fg_lut_num << 8U);
     /* foreground LUT pixel format configuration */
-    if(IPA_LUT_PF_RGB888 == fg_lut_pf) {
+    if (IPA_LUT_PF_RGB888 == fg_lut_pf) {
         IPA_FPCTL |= IPA_FPCTL_FLPF;
     } else {
         IPA_FPCTL &= ~(IPA_FPCTL_FLPF);
@@ -441,7 +445,7 @@ void ipa_foreground_lut_init(uint8_t fg_lut_num, uint8_t fg_lut_pf, uint32_t fg_
     IPA_FLMADDR &= ~(IPA_FLMADDR_FLMADDR);
     IPA_FLMADDR = fg_lut_addr;
 
-    if(SET == tempflag) {
+    if (SET == tempflag) {
         /* restore the state of FLLEN */
         IPA_FPCTL |= IPA_FPCTL_FLLEN;
     }
@@ -458,7 +462,7 @@ void ipa_foreground_lut_init(uint8_t fg_lut_num, uint8_t fg_lut_pf, uint32_t fg_
 void ipa_background_lut_init(uint8_t bg_lut_num, uint8_t bg_lut_pf, uint32_t bg_lut_addr)
 {
     FlagStatus tempflag = RESET;
-    if(RESET != (IPA_BPCTL & IPA_BPCTL_BLLEN)) {
+    if (RESET != (IPA_BPCTL & IPA_BPCTL_BLLEN)) {
         tempflag = SET;
         /* reset the BLLEN in order to configure the following bits */
         IPA_BPCTL &= ~IPA_BPCTL_BLLEN;
@@ -467,7 +471,7 @@ void ipa_background_lut_init(uint8_t bg_lut_num, uint8_t bg_lut_pf, uint32_t bg_
     /* background LUT number of pixel configuration */
     IPA_BPCTL |= ((uint32_t)bg_lut_num << 8U);
     /* background LUT pixel format configuration */
-    if(IPA_LUT_PF_RGB888 == bg_lut_pf) {
+    if (IPA_LUT_PF_RGB888 == bg_lut_pf) {
         IPA_BPCTL |= IPA_BPCTL_BLPF;
     } else {
         IPA_BPCTL &= ~(IPA_BPCTL_BLPF);
@@ -476,7 +480,7 @@ void ipa_background_lut_init(uint8_t bg_lut_num, uint8_t bg_lut_pf, uint32_t bg_
     IPA_BLMADDR &= ~(IPA_BLMADDR_BLMADDR);
     IPA_BLMADDR = bg_lut_addr;
 
-    if(SET == tempflag) {
+    if (SET == tempflag) {
         /* restore the state of BLLEN */
         IPA_BPCTL |= IPA_BPCTL_BLLEN;
     }
@@ -502,7 +506,7 @@ void ipa_line_mark_config(uint16_t line_num)
 */
 void ipa_inter_timer_config(uint8_t timer_cfg)
 {
-    if(IPA_INTER_TIMER_ENABLE == timer_cfg) {
+    if (IPA_INTER_TIMER_ENABLE == timer_cfg) {
         IPA_ITCTL |= IPA_ITCTL_ITEN;
     } else {
         IPA_ITCTL &= ~(IPA_ITCTL_ITEN);
@@ -537,7 +541,7 @@ void ipa_interval_clock_num_config(uint8_t clk_num)
 */
 FlagStatus ipa_flag_get(uint32_t flag)
 {
-    if(RESET != (IPA_INTF & flag)) {
+    if (RESET != (IPA_INTF & flag)) {
         return SET;
     } else {
         return RESET;
@@ -613,7 +617,7 @@ void ipa_interrupt_disable(uint32_t int_flag)
 */
 FlagStatus ipa_interrupt_flag_get(uint32_t int_flag)
 {
-    if(0U != (IPA_INTF & int_flag)) {
+    if ((IPA_INTF & int_flag) != 0U) {
         return SET;
     } else {
         return RESET;

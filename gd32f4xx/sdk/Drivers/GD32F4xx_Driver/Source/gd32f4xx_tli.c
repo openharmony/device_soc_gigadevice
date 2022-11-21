@@ -37,8 +37,8 @@ OF SUCH DAMAGE.
 
 #include "gd32f4xx_tli.h"
 
-#define TLI_DEFAULT_VALUE   0x00000000U
-#define TLI_OPAQUE_VALUE    0x000000FFU
+#define TLI_DEFAULT_VALUE 0x00000000U
+#define TLI_OPAQUE_VALUE 0x000000FFU
 
 /*!
     \brief    deinitialize TLI registers
@@ -133,9 +133,8 @@ void tli_init(tli_parameter_struct *tli_struct)
     TLI_BGC &= ~(TLI_BGC_BVB | (TLI_BGC_BVG) | (TLI_BGC_BVR));
     TLI_BGC = (tli_struct->backcolor_blue | (tli_struct->backcolor_green << 8U) | (tli_struct->backcolor_red << 16U));
     TLI_CTL &= ~(TLI_CTL_HPPS | TLI_CTL_VPPS | TLI_CTL_DEPS | TLI_CTL_CLKPS);
-    TLI_CTL |= (tli_struct->signalpolarity_hs | tli_struct->signalpolarity_vs | \
-                tli_struct->signalpolarity_de | tli_struct->signalpolarity_pixelck);
-
+    TLI_CTL |= (tli_struct->signalpolarity_hs | tli_struct->signalpolarity_vs | tli_struct->signalpolarity_de |
+                tli_struct->signalpolarity_pixelck);
 }
 
 /*!
@@ -149,7 +148,7 @@ void tli_init(tli_parameter_struct *tli_struct)
 */
 void tli_dither_config(uint8_t dither_stat)
 {
-    if(TLI_DITHER_ENABLE == dither_stat) {
+    if (TLI_DITHER_ENABLE == dither_stat) {
         TLI_CTL |= TLI_CTL_DFEN;
     } else {
         TLI_CTL &= ~(TLI_CTL_DFEN);
@@ -189,7 +188,7 @@ void tli_disable(void)
 */
 void tli_reload_config(uint8_t reload_mod)
 {
-    if(TLI_FRAME_BLANK_RELOAD_EN == reload_mod) {
+    if (TLI_FRAME_BLANK_RELOAD_EN == reload_mod) {
         /* the layer configuration will be reloaded at frame blank */
         TLI_RL |= TLI_RL_FBR;
     } else {
@@ -273,10 +272,12 @@ void tli_layer_init(uint32_t layerx, tli_layer_parameter_struct *layer_struct)
 {
     /* configure layer window horizontal position */
     TLI_LxHPOS(layerx) &= ~(TLI_LxHPOS_WLP | (TLI_LxHPOS_WRP));
-    TLI_LxHPOS(layerx) = (uint32_t)((uint32_t)layer_struct->layer_window_leftpos | ((uint32_t)layer_struct->layer_window_rightpos << 16U));
+    TLI_LxHPOS(layerx) = (uint32_t)((uint32_t)layer_struct->layer_window_leftpos |
+                                    ((uint32_t)layer_struct->layer_window_rightpos << 16U));
     /* configure layer window vertical position */
     TLI_LxVPOS(layerx) &= ~(TLI_LxVPOS_WTP | (TLI_LxVPOS_WBP));
-    TLI_LxVPOS(layerx) = (uint32_t)((uint32_t)layer_struct->layer_window_toppos | ((uint32_t)layer_struct->layer_window_bottompos << 16U));
+    TLI_LxVPOS(layerx) = (uint32_t)((uint32_t)layer_struct->layer_window_toppos |
+                                    ((uint32_t)layer_struct->layer_window_bottompos << 16U));
     /* configure layer packeted pixel format */
     TLI_LxPPF(layerx) &= ~(TLI_LxPPF_PPF);
     TLI_LxPPF(layerx) = layer_struct->layer_ppf;
@@ -285,9 +286,10 @@ void tli_layer_init(uint32_t layerx, tli_layer_parameter_struct *layer_struct)
     TLI_LxSA(layerx) = layer_struct->layer_sa;
     /* configure layer default color */
     TLI_LxDC(layerx) &= ~(TLI_LxDC_DCB | (TLI_LxDC_DCG) | (TLI_LxDC_DCR) | (TLI_LxDC_DCA));
-    TLI_LxDC(layerx) = (uint32_t)((uint32_t)layer_struct->layer_default_blue | ((uint32_t)layer_struct->layer_default_green << 8U)
-                                  | ((uint32_t)layer_struct->layer_default_red << 16U)
-                                  | ((uint32_t)layer_struct->layer_default_alpha << 24U));
+    TLI_LxDC(layerx) =
+        (uint32_t)((uint32_t)layer_struct->layer_default_blue | ((uint32_t)layer_struct->layer_default_green << 8U) |
+                   ((uint32_t)layer_struct->layer_default_red << 16U) |
+                   ((uint32_t)layer_struct->layer_default_alpha << 24U));
 
     /* configure layer alpha calculation factors */
     TLI_LxBLEND(layerx) &= ~(TLI_LxBLEND_ACF2 | (TLI_LxBLEND_ACF1));
@@ -297,11 +299,11 @@ void tli_layer_init(uint32_t layerx, tli_layer_parameter_struct *layer_struct)
     TLI_LxFBADDR(layerx) = (layer_struct->layer_frame_bufaddr);
     /* configure layer frame line length */
     TLI_LxFLLEN(layerx) &= ~(TLI_LxFLLEN_FLL | (TLI_LxFLLEN_STDOFF));
-    TLI_LxFLLEN(layerx) = (uint32_t)((uint32_t)layer_struct->layer_frame_line_length | ((uint32_t)layer_struct->layer_frame_buf_stride_offset << 16U));
+    TLI_LxFLLEN(layerx) = (uint32_t)((uint32_t)layer_struct->layer_frame_line_length |
+                                     ((uint32_t)layer_struct->layer_frame_buf_stride_offset << 16U));
     /* configure layer frame total line number */
     TLI_LxFTLN(layerx) &= ~(TLI_LxFTLN_FTLN);
     TLI_LxFTLN(layerx) = (uint32_t)(layer_struct->layer_frame_total_line_number);
-
 }
 
 /*!
@@ -324,29 +326,29 @@ void tli_layer_window_offset_modify(uint32_t layerx, uint16_t offset_x, uint16_t
     line_num = (TLI_LxFTLN(layerx) & TLI_LxFTLN_FTLN);
     layer_ppf = (TLI_LxPPF(layerx) & TLI_LxPPF_PPF);
     /* the bytes of a line equal TLI_LxFLLEN_FLL bits value minus 3 */
-    switch(layer_ppf) {
-    case LAYER_PPF_ARGB8888:
-        /* each pixel includes 4bytes, when pixel format is ARGB8888 */
-        line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U) / 4U);
-        break;
-    case LAYER_PPF_RGB888:
-        /* each pixel includes 3bytes, when pixel format is RGB888 */
-        line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U) / 3U);
-        break;
-    case LAYER_PPF_RGB565:
-    case LAYER_PPF_ARGB1555:
-    case LAYER_PPF_ARGB4444:
-    case LAYER_PPF_AL88:
-        /* each pixel includes 2bytes, when pixel format is RGB565,ARG1555,ARGB4444 or AL88 */
-        line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U) / 2U);
-        break;
-    case LAYER_PPF_L8:
-    case LAYER_PPF_AL44:
-        /* each pixel includes 1byte, when pixel format is L8 or AL44 */
-        line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U));
-        break;
-    default:
-        break;
+    switch (layer_ppf) {
+        case LAYER_PPF_ARGB8888:
+            /* each pixel includes 4bytes, when pixel format is ARGB8888 */
+            line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U) / 4U);
+            break;
+        case LAYER_PPF_RGB888:
+            /* each pixel includes 3bytes, when pixel format is RGB888 */
+            line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U) / 3U);
+            break;
+        case LAYER_PPF_RGB565:
+        case LAYER_PPF_ARGB1555:
+        case LAYER_PPF_ARGB4444:
+        case LAYER_PPF_AL88:
+            /* each pixel includes 2bytes, when pixel format is RGB565,ARG1555,ARGB4444 or AL88 */
+            line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U) / 2U);
+            break;
+        case LAYER_PPF_L8:
+        case LAYER_PPF_AL44:
+            /* each pixel includes 1byte, when pixel format is L8 or AL44 */
+            line_length = (((TLI_LxFLLEN(layerx) & TLI_LxFLLEN_FLL) - 3U));
+            break;
+        default:
+            break;
     }
     /* reconfigure window position */
     TLI_LxHPOS(layerx) = (hstart | ((hstart + line_length - 1U) << 16U));
@@ -386,9 +388,10 @@ void tli_lut_struct_para_init(tli_layer_lut_parameter_struct *lut_struct)
 */
 void tli_lut_init(uint32_t layerx, tli_layer_lut_parameter_struct *lut_struct)
 {
-    TLI_LxLUT(layerx) = (uint32_t)(((uint32_t)lut_struct->layer_lut_channel_blue) | ((uint32_t)lut_struct->layer_lut_channel_green << 8U)
-                                   | ((uint32_t)lut_struct->layer_lut_channel_red << 16U
-                                      | ((uint32_t)lut_struct->layer_table_addr << 24U)));
+    TLI_LxLUT(layerx) = (uint32_t)(((uint32_t)lut_struct->layer_lut_channel_blue) |
+                                   ((uint32_t)lut_struct->layer_lut_channel_green << 8U) |
+                                   ((uint32_t)lut_struct->layer_lut_channel_red << 16U |
+                                    ((uint32_t)lut_struct->layer_table_addr << 24U)));
 }
 
 /*!
@@ -541,9 +544,9 @@ FlagStatus tli_interrupt_flag_get(uint32_t int_flag)
 {
     uint32_t state;
     state = TLI_INTF;
-    if(state & int_flag) {
+    if (state & int_flag) {
         state = TLI_INTEN;
-        if(state & int_flag) {
+        if (state & int_flag) {
             return SET;
         }
     }
@@ -585,12 +588,12 @@ FlagStatus tli_flag_get(uint32_t flag)
 {
     uint32_t stat;
     /* choose which register to get flag or state */
-    if(flag >> 31U) {
+    if (flag >> 31U) {
         stat = TLI_INTF;
     } else {
         stat = TLI_STAT;
     }
-    if(flag & stat) {
+    if (flag & stat) {
         return SET;
     } else {
         return RESET;
