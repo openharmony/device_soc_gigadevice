@@ -15,9 +15,9 @@ import("//kernel/liteos_m/liteos.gni")
 
 config("public") {
   include_dirs = [
-    "CMSIS",
-    "CMSIS/GD/GD32F4xx/Include",
-    "Drivers/GD32F4xx_Driver/Include",
+    "cmsis",
+    "cmsis/gd/gd32f4xx/include",
+    "drivers/gd32f4xx_driver/include",
   ]
 }
 
@@ -27,26 +27,26 @@ kernel_module(module_name) {
   asmflags = board_asmflags
 
   sources = [
-    "CMSIS/GD/GD32F4xx/Source/system_gd32f4xx.c",
-    "Drivers/GD32F4xx_Driver/Source/fmc_operation.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_adc.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_dac.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_dma.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_enet.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_exmc.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_exti.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_fmc.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_fwdgt.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_gpio.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_i2c.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_ipa.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_misc.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_pmu.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_rcu.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_spi.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_syscfg.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_timer.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_tli.c",
-    "Drivers/GD32F4xx_Driver/Source/gd32f4xx_usart.c",
+    "cmsis/gd/gd32f4xx/source/system_gd32f4xx.c",
+    "drivers/gd32f4xx_driver/source/fmc_operation.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_adc.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_dac.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_dma.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_enet.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_exmc.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_exti.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_fmc.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_fwdgt.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_gpio.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_i2c.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_ipa.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_misc.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_pmu.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_rcu.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_spi.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_syscfg.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_timer.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_tli.c",
+    "drivers/gd32f4xx_driver/source/gd32f4xx_usart.c",
   ]
 }
