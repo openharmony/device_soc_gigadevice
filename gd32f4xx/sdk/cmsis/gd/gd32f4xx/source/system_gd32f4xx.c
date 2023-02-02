@@ -41,8 +41,7 @@
 #define __SYS_OSC_CLK (__IRC16M) /* main oscillator frequency */
 
 /* select a system clock by uncommenting the following line */
-#define __SYSTEM_CLOCK_200M_PLL_25M_HXTAL (uint32_t)(200000000)
-
+#define __SYSTEM_CLOCK_120M_PLL_25M_HXTAL       (uint32_t)(120000000)
 #define RCU_MODIFY(__delay)                                                                                            \
     do {                                                                                                               \
         volatile uint32_t i;                                                                                           \
